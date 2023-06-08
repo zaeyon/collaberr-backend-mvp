@@ -12,11 +12,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "core.apps.creator.apps.CreatorConfig",
-    "core.apps.business.apps.BusinessConfig",
-    "core.apps.user.apps.UserConfig",
-    "core.apps.home.apps.HomeConfig",
-    "core.apps.campaign.apps.CampaignConfig",
     "rest_framework",
 ]
 
@@ -55,7 +50,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "core.project.wsgi.application"
 
-AUTH_USER_MODEL = "user.KollabUser"
+# AUTH_USER_MODEL = "user.KollabUser"
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
