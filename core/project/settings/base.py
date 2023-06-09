@@ -12,6 +12,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "core.accounts.apps.AccountsConfig",
     "rest_framework",
 ]
 
@@ -50,7 +51,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "core.project.wsgi.application"
 
-# AUTH_USER_MODEL = "user.KollabUser"
+AUTH_USER_MODEL = "accounts.Account"
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
@@ -79,6 +80,11 @@ USE_I18N = True
 
 USE_TZ = True
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+      'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 
 STATIC_ROOT = "/static/"
 STATICFILES_DIRS = ((BASE_DIR / "core/static"),)  # type: ignore
