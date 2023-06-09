@@ -21,6 +21,7 @@ class Account(AbstractBaseUser):
     balance = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
 
     objects = AccountManager()
     USERNAME_FIELD = "username"
@@ -32,6 +33,12 @@ class Account(AbstractBaseUser):
     @property
     def id(self):
         return self.account_id
+    
+    def has_module_perms(self, app_label):
+        return self.is_superuser
+
+    def has_perm(self, perm, obj=None):
+        return self.is_superuser
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
