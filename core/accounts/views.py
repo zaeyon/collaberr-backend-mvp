@@ -1,8 +1,11 @@
 from django.shortcuts import render
+# DRF imports
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
+
+# collaberr imports
 from .serializers import AccountSerializer
 from .models import Account
 
@@ -16,8 +19,8 @@ class AccountViewSet(ModelViewSet):
     authentication_classes = []
     permission_classes = [AllowAny]
 
-    # def get_queryset(self):
-        # return Account.objects.all()
+    def get_queryset(self):
+        return Account.objects.all()
 
     def create(self, request, *args, **kwargs):
         account_id = self.generate_account_id()
