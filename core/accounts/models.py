@@ -1,10 +1,16 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
 from core.general.validators import HexStringValidator
 from core.general.constants import ACCOUNT_ID_LENGTH
+from .managers import AccountManager
 
-class Account(AbstractUser, PermissionsMixin):
+class Account(AbstractBaseUser):
+    class Meta:
+        db_table = 'accounts'
+        verbose_name = 'Account'
+        verbose_name_plural = 'Accounts'
+
     account_id = models.CharField(
             max_length=ACCOUNT_ID_LENGTH,
             primary_key=True,
@@ -16,6 +22,7 @@ class Account(AbstractUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
+    objects = AccountManager()
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
     
