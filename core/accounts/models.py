@@ -14,10 +14,12 @@ class Account(AbstractBaseUser):
     account_id = models.CharField(
             max_length=ACCOUNT_ID_LENGTH,
             primary_key=True,
+            unique=True,
             validators=[HexStringValidator(ACCOUNT_ID_LENGTH)],
             )
     username = models.CharField(max_length=16, unique=True)
     password = models.CharField(max_length=25)
+    email = models.EmailField(max_length=50, unique=True)
     balance = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
