@@ -10,6 +10,10 @@ class Account(AbstractBaseUser):
         db_table = 'accounts'
         verbose_name = 'Account'
         verbose_name_plural = 'Accounts'
+    
+    class Roles(models.TextChoices):
+        CREATOR = 'CREATOR', 'creator'
+        BUSINESS = 'BUSINESS', 'business'
 
     account_id = models.CharField(
             max_length=ACCOUNT_ID_LENGTH,
@@ -20,6 +24,7 @@ class Account(AbstractBaseUser):
     username = models.CharField(max_length=16, unique=True)
     password = models.CharField(max_length=25)
     email = models.EmailField(max_length=50, unique=True)
+    role = models.CharField(max_length=50, choices=Roles.choices)
     balance = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -47,6 +52,4 @@ class Account(AbstractBaseUser):
     # for businesses
     # for creators
     # earnings = models.PositiveIntegerField(default=0, )
-
-
     
