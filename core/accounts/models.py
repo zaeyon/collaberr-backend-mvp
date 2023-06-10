@@ -36,10 +36,6 @@ class Account(AbstractBaseUser):
     
     def __str__(self):
         return f'{self.username} | {self.balance}'
-
-    # @property
-    # def id(self):
-    #     return self.account_id
     
     def has_module_perms(self, app_label):
         return self.is_superuser
@@ -50,13 +46,11 @@ class Account(AbstractBaseUser):
     def save(self, *args, **kwargs):
         is_new_account = self._state.adding
         super().save(*args, **kwargs)
-        # if not self.is_saved:
         if is_new_account:
             if self.role == Account.Roles.CREATOR:
                 Creator.objects.create(account_id=self)
             elif self.role == Account.Roles.BUSINESS:
                 Business.objects.create(account_id=self)
-            # self.is_saved = True
 
 class Creator(models.Model):
     class Meta:
