@@ -15,6 +15,7 @@ class Account(AbstractBaseUser):
         CREATOR = 'CREATOR', 'creator'
         BUSINESS = 'BUSINESS', 'business'
 
+    # Created at account creation
     id = models.CharField(
             max_length=ACCOUNT_ID_LENGTH,
             primary_key=True,
@@ -29,6 +30,14 @@ class Account(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    # Updated at account edit
+    first_name = models.CharField(max_length=25, blank=True)
+    last_name = models.CharField(max_length=25, blank=True)
+    
+
+
 
     objects = AccountManager()
     USERNAME_FIELD = "username"

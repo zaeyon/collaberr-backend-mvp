@@ -4,7 +4,7 @@ from .models import Account
 import random
 import re
 
-class AccountSerializer(serializers.ModelSerializer):
+class AccountCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     class Meta:
@@ -32,3 +32,10 @@ class AccountSerializer(serializers.ModelSerializer):
     def generate_account_id(self):
         pattern = re.compile(r'[0-9a-f]{16}')
         return ''.join(random.choices('0123456789abcdef', k=16))
+
+# Fields = fields that I can update with "edit profile" link
+class AccountUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ['username', 'email', 'first_name', 'last_name']
+        
