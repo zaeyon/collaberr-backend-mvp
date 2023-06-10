@@ -56,6 +56,12 @@ AUTH_USER_MODEL = "accounts.Account"
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
+PASSWORD_HASHERS = [
+    'django.contrib.auth.hashers.Argon2PasswordHasher',
+    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+    'django.contrib.auth.hashers.BCryptPasswordHasher',
+    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+]
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -63,6 +69,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        # Implement this later
+        # "OPTIONS": {"min_length": 8},
+        
     },
     {
         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
@@ -70,6 +79,10 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
+    # Implement this later
+    # {
+    #     "NAME": "core.general.validators.PasswordValidator",
+    # },
 ]
 
 LANGUAGE_CODE = "en-us"
