@@ -15,7 +15,7 @@ class Account(AbstractBaseUser):
         CREATOR = 'CREATOR', 'creator'
         BUSINESS = 'BUSINESS', 'business'
 
-    account_id = models.CharField(
+    id = models.CharField(
             max_length=ACCOUNT_ID_LENGTH,
             primary_key=True,
             unique=True,
@@ -37,9 +37,9 @@ class Account(AbstractBaseUser):
     def __str__(self):
         return f'{self.username} | {self.balance}'
 
-    @property
-    def id(self):
-        return self.account_id
+    # @property
+    # def id(self):
+    #     return self.account_id
     
     def has_module_perms(self, app_label):
         return self.is_superuser
@@ -48,8 +48,50 @@ class Account(AbstractBaseUser):
         return self.is_superuser
 
     def save(self, *args, **kwargs):
+        is_new_account = self._state.adding
         super().save(*args, **kwargs)
-    # for businesses
-    # for creators
-    # earnings = models.PositiveIntegerField(default=0, )
+        # if not self.is_saved:
+        if is_new_account:
+            if self.role == Account.Roles.CREATOR:
+                Creator.objects.create(account_id=self)
+            elif self.role == Account.Roles.BUSINESS:
+                Business.objects.create(account_id=self)
+            # self.is_saved = True
+
+class Creator(models.Model):
+    class Meta:
+        db_table = 'creators'
+        verbose_name = 'Creator'
+        verbose_name_plural = 'Creators'
+    
+    account_id = models.OneToOneField(
+            Account,
+            on_delete=models.CASCADE,
+            primary_key=True,
+            related_name='creator',
+            )
+    earnings = models.PositiveIntegerField(default=0)
+
+class Business(models.Model):
+    class Meta:
+        db_table = 'businesses'
+        verbose_name = 'Business'
+        verbose_name_plural = 'Businesses'
+
+    account_id = models.OneToOneField(
+            Account,
+            on_delete=models.CASCADE,
+            primary_key=True,
+            related_name='business',
+            )
+
+
+
+
+
+
+
+
+
+
     

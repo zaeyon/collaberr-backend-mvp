@@ -20,7 +20,7 @@ class AccountSerializer(serializers.ModelSerializer):
             try:
                 user = Account.objects.create_user(
                         username=validated_data['username'],
-                        account_id = account_id,
+                        id = account_id,
                         password=password,
                         role=validated_data['role'],
                         email = validated_data['email'],
