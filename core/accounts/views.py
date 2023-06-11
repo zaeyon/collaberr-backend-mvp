@@ -9,7 +9,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
 # collaberr imports
 from .serializers import AccountCreateSerializer, AccountUpdateSerializer
 from .models import Account
-from core.general.authentications import IsAccountOwnerOrAdmin
+from core.general.permissions import IsAccountOwnerOrAdmin
 
 
 class AccountViewSet(ModelViewSet):
@@ -22,32 +22,18 @@ class AccountViewSet(ModelViewSet):
     # Handle account creation
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                    serializer.data,
-                    status=status.HTTP_201_CREATED,
-                    )
-        return Response(
-                serializer.errors,
-                status=status.HTTP_400_BAD_REQUEST,
-                )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     # Handle account update
     def partial_update(self, request, *args, **kwargs):
         account = self.get_object()
         serializer = self.get_serializer(account, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(
-                    serializer.data,
-                    status=status.HTTP_200_OK,
-                    )
-        return Response(
-                serializer.errors,
-                status=status.HTTP_400_BAD_REQUEST,
-                )
-   
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     def get_queryset(self):
         return Account.objects.all()
 
