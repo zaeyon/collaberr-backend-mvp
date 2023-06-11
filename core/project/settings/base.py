@@ -12,7 +12,13 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+   
+    # Collaberr apps
     "core.accounts.apps.AccountsConfig",
+    "core.campaigns.apps.CampaignsConfig",
+
+    # Third party apps
+    "django_filters",
     "rest_framework",
 ]
 

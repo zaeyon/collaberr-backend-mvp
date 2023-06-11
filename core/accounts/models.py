@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.conf import settings
 
 from core.general.validators import HexStringValidator
-from core.general.constants import ACCOUNT_ID_LENGTH
+from core.general.constants import ACCOUNT_ID_LENGTH, USER_NAME_LENGTH
 from .managers import AccountManager
 
 class Account(AbstractBaseUser, PermissionsMixin):
@@ -23,7 +23,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
             unique=True,
             validators=[HexStringValidator(ACCOUNT_ID_LENGTH)],
             )
-    username = models.CharField(max_length=16, unique=True)
+    username = models.CharField(max_length=USER_NAME_LENGTH, unique=True)
     password = models.CharField(max_length=25)
     email = models.EmailField(max_length=50, unique=True)
     role = models.CharField(max_length=50, choices=Roles.choices)
@@ -37,9 +37,6 @@ class Account(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=25, blank=True)
     last_name = models.CharField(max_length=25, blank=True)
     
-
-
-
     objects = AccountManager()
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
