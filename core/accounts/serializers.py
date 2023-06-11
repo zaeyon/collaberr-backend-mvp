@@ -17,11 +17,7 @@ class AccountCreateSerializer(serializers.ModelSerializer):
         while True:
             account_id = self.generate_account_id()
             try:
-                user = Account.objects.create_user(
-                        **validated_data,
-                        id = account_id,
-                        password=password,
-                        )
+                user = Account.objects.create_user(**validated_data, id = account_id, password=password)
                 return user
             except IntegrityError:
                 continue
@@ -29,7 +25,7 @@ class AccountCreateSerializer(serializers.ModelSerializer):
     def generate_account_id(self):
         return ''.join(random.choices('0123456789abcdef', k=16))
 
-# Fields = fields that I can update with "edit profile" link
+# Fields that I can update with "edit profile" link
 class AccountUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account

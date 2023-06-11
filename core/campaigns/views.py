@@ -24,8 +24,7 @@ class CampaignViewSet(viewsets.ModelViewSet):
     serializer_class = CampaignCreateSerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data, 
-                                         context={'request': request})
+        serializer = self.get_serializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         campaign = serializer.save()
         read_serializer = CampaignReadSerializer(campaign)
@@ -34,8 +33,7 @@ class CampaignViewSet(viewsets.ModelViewSet):
 
     def partial_update(self, request, *args, **kwargs):
         obj = self.get_object()
-        serializer = self.get_serializer(obj, data=request.data,
-                                         partial=True, 
+        serializer = self.get_serializer(obj, data=request.data,partial=True, 
                                          context={'request': request})
         serializer.is_valid(raise_exception=True)
         campaign = serializer.save()

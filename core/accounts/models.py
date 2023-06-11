@@ -42,7 +42,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
     
     def __str__(self):
-        return f'{self.username} | {self.balance}'
+        return f'{self.username}'
     
     def has_module_perms(self, app_label):
         return self.is_superuser

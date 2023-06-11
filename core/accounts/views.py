@@ -18,6 +18,7 @@ class AccountViewSet(ModelViewSet):
     permission_classes = [AllowAny]
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
     serializer_class = AccountCreateSerializer
+    queryset = Account.objects.none()
 
     # Handle account creation
     def create(self, request, *args, **kwargs):
@@ -35,18 +36,16 @@ class AccountViewSet(ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get_queryset(self):
-        return Account.objects.all()
+        if self.request.user.is_authenticated:
+            return Account.objects.filter(id=self.request.user.id)
+        return super().get_queryset()
 
     def get_serializer_class(self):
-        if self.action == 'create':
-            return AccountCreateSerializer
-        elif self.action in ['retrieve', 'update', 'delete', 'partial_update']:
+        if self.action in ['retrieve', 'update', 'delete', 'partial_update']:
             return AccountUpdateSerializer
-        return super().get_serializer_class()
+        return AccountCreateSerializer
 
     def get_permissions(self):
-        if self.action == 'create':
-            return [AllowAny()]
-        elif self.action in ['retrieve', 'update', 'delete', 'partial_update']:
+        if self.action in ['retrieve', 'update', 'delete', 'partial_update']:
             return [IsAccountOwnerOrAdmin()]
-        return super().get_permissions()
+        return [AllowAny()]
