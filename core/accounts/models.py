@@ -40,7 +40,7 @@ class Account(AbstractBaseUser):
 
 
     objects = AccountManager()
-    USERNAME_FIELD = "username"
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     
     def __str__(self):
@@ -72,6 +72,7 @@ class Creator(models.Model):
             on_delete=models.CASCADE,
             primary_key=True,
             related_name='creator',
+            db_column='account_id',
             )
     earnings = models.PositiveIntegerField(default=0)
 
@@ -86,6 +87,7 @@ class Business(models.Model):
             on_delete=models.CASCADE,
             primary_key=True,
             related_name='business',
+            db_column='account_id',
             )
 
 
