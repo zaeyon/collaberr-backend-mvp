@@ -1,11 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.conf import settings
 
 from core.general.validators import HexStringValidator
 from core.general.constants import ACCOUNT_ID_LENGTH
 from .managers import AccountManager
 
-class Account(AbstractBaseUser):
+class Account(AbstractBaseUser, PermissionsMixin):
     class Meta:
         db_table = 'accounts'
         verbose_name = 'Account'
@@ -40,7 +41,7 @@ class Account(AbstractBaseUser):
 
 
     objects = AccountManager()
-    USERNAME_FIELD = "username"
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     
     def __str__(self):
@@ -68,10 +69,11 @@ class Creator(models.Model):
         verbose_name_plural = 'Creators'
     
     account_id = models.OneToOneField(
-            Account,
+            settings.AUTH_USER_MODEL, 
             on_delete=models.CASCADE,
             primary_key=True,
             related_name='creator',
+            db_column='account_id',
             )
     earnings = models.PositiveIntegerField(default=0)
 
@@ -82,10 +84,11 @@ class Business(models.Model):
         verbose_name_plural = 'Businesses'
 
     account_id = models.OneToOneField(
-            Account,
+            settings.AUTH_USER_MODEL, 
             on_delete=models.CASCADE,
             primary_key=True,
             related_name='business',
+            db_column='account_id',
             )
 
 
