@@ -10,6 +10,7 @@ LOCAL_SETTINGS_PATH = str(BASE_DIR / "local/settings.dev.py")
 include(
     # first load django settings
     "base.py",
+    "logging.py",
     # then load our own custom settings
     "custom.py",
     # then load local settings

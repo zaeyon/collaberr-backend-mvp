@@ -1,10 +1,13 @@
 from django.shortcuts import render
+from django.contrib.auth import authenticate
 
 # DRF imports
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
+from rest_framework.authtoken.models import Token
 
 # collaberr imports
 from .serializers import AccountCreateSerializer, AccountUpdateSerializer
@@ -49,3 +52,21 @@ class AccountViewSet(ModelViewSet):
         if self.action in ['retrieve', 'update', 'delete', 'partial_update']:
             return [IsAccountOwnerOrAdmin()]
         return [AllowAny()]
+
+
+class LoginAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        if email and password:
+            user = authenticate(email=email, password=password)
+            if user:
+                token, created = Token.objects.get_or_create(user=user)
+                return Response({'token': token.key})
+            else:
+                return Response({'error': 'Invalid email/password'}, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response({'error': 'Missing email/password'}, status=status.HTTP_400_BAD_REQUEST)
