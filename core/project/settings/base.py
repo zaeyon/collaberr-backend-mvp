@@ -14,8 +14,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
    
     # Collaberr apps
-    "core.accounts.apps.AccountsConfig",
-    "core.campaigns.apps.CampaignsConfig",
+    "core.apps.accounts.apps.AccountsConfig",
+    "core.apps.campaigns.apps.CampaignsConfig",
+    "core.apps.home.apps.HomeConfig",
 
     # Third party apps
     "django_filters",

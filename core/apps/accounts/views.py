@@ -17,13 +17,11 @@ from core.general.permissions import IsAccountOwnerOrAdmin
 
 class AccountViewSet(ModelViewSet):
 
-    # TODO MEDIUM: could have to restrict permissions
     permission_classes = [AllowAny]
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
     serializer_class = AccountCreateSerializer
     queryset = Account.objects.none()
 
-    # Handle account creation
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)

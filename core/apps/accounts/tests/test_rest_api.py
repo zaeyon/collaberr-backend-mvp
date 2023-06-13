@@ -1,6 +1,7 @@
 import pytest
 from rest_framework.test import APIClient
 from model_bakery import baker
+from django.contrib.auth import get_user
 
 @pytest.fixture
 def api_client():
@@ -11,14 +12,18 @@ def api_client():
 class TestAccountAPI:
 
     def test_login(self, client, account):
-        response = client.post('/api/login/', {'email': "testuser@test.com", 'password': 'test'})
+        response = client.post('/login/', {'email': "testuser@test.com", 'password': 'test'})
         assert response.status_code == 200
 
-    # def test_edit_profile(self, client, account):
-    #     client.force_authenticate(user=account)
-    #     response = client.patch(f'/api/accounts/{account.id}/', {'username': 'new_username'})
-    #     assert response.status_code == 200
-    #     assert response.data['username'] == 'new_username'
+    def test_edit_profile(self, api_client, account):
+        api_client.post('/login/', {'email': "testuser@test.com", 'password': 'test'})
+
+        logged_in_user = get_user(api_client)
+        logged_in_user_id = logged_in_user.id
+        print(logged_in_user_id)
+        response = api_client.patch(f'/api/accounts/{logged_in_user_id}/', {'username': 'new_username'})
+        assert response.status_code == 200
+        assert response.data['username'] == 'new_username'
 
     # def test_create_campaign(self, client, account):
     #     client.force_authenticate(user=account)

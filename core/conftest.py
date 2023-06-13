@@ -1,2 +1,2 @@
-from core.accounts.tests.fixtures import *  # noqa
+from core.apps.accounts.tests.fixtures import *  # noqa
 
