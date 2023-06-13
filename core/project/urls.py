@@ -7,7 +7,6 @@ API_PREFIX = "api/"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("core.apps.home.urls")),
     path(API_PREFIX, include("core.apps.accounts.urls")),
     path(API_PREFIX, include("core.apps.campaigns.urls")),
 ]
