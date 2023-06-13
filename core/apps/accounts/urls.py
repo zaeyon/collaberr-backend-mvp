@@ -6,6 +6,7 @@ router = SimpleRouter(trailing_slash=False)
 router.register('accounts', views.AccountViewSet, basename='accounts')
 
 urlpatterns = [
-    # path('login/', views.LoginAPIView.as_view(), name='login'),
+    # api/login
+    path('login/', views.CustomLoginView.as_view(), name='login'),
 ] + router.urls
 
