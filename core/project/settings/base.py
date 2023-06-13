@@ -16,7 +16,6 @@ INSTALLED_APPS = [
     # Collaberr apps
     "core.apps.accounts.apps.AccountsConfig",
     "core.apps.campaigns.apps.CampaignsConfig",
-    "core.apps.home.apps.HomeConfig",
 
     # Third party apps
     "django_filters",
