@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.db import IntegrityError
 from .models import Account
 import random
+from django.contrib.auth import authenticate
 
 class AccountCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -30,4 +31,4 @@ class AccountUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = ['username', 'email', 'first_name', 'last_name']
-        
+       

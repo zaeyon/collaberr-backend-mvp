@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import update_last_login
 
 # DRF imports
 from rest_framework.viewsets import ModelViewSet
@@ -7,7 +8,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated, BasePermission
-from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 
 # collaberr imports
 from .serializers import AccountCreateSerializer, AccountUpdateSerializer
@@ -16,7 +18,6 @@ from core.general.permissions import IsAccountOwnerOrAdmin
 
 
 class AccountViewSet(ModelViewSet):
-
     permission_classes = [AllowAny]
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
     serializer_class = AccountCreateSerializer
@@ -52,19 +53,10 @@ class AccountViewSet(ModelViewSet):
         return [AllowAny()]
 
 
-class LoginAPIView(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
-
-        if email and password:
-            user = authenticate(email=email, password=password)
-            if user:
-                token, created = Token.objects.get_or_create(user=user)
-                return Response({'token': token.key})
-            else:
-                return Response({'error': 'Invalid email/password'}, status=status.HTTP_401_UNAUTHORIZED)
-        else:
-            return Response({'error': 'Missing email/password'}, status=status.HTTP_400_BAD_REQUEST)
+class CustomLoginView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        if response.status_code == status.HTTP_200_OK:
+            user = Account.objects.get(email=request.data['email'])
+            update_last_login(None, user)
+        return response
