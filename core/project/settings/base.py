@@ -12,7 +12,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-   
+
     # Collaberr apps
     "core.apps.accounts.apps.AccountsConfig",
     "core.apps.campaigns.apps.CampaignsConfig",
@@ -33,16 +33,29 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "corsheaders.middleware.CorsMiddleware", 
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "core/db.sqlite3",  # type: ignore
+#     }
+# }
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "core/db.sqlite3",  # type: ignore
-    }
+   'default': {
+      'ENGINE': 'django.db.backends.postgresql',
+      'NAME': 'collaberr',
+      'USER': 'postgres',
+      'PASSWORD': 'collaberr',
+      'HOST': 'localhost',
+      'PORT': '5432',
+      'ATOMIC_REQUESTS': True,
+      'CONN_MAX_AGE': 60,
+   }
 }
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -81,7 +94,7 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
         # Implement this later
         # "OPTIONS": {"min_length": 8},
-        
+
     },
     {
         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
