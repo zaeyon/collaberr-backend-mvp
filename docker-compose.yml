@@ -22,8 +22,7 @@ services:
     depends_on:
       - db
     environment:
-      SETTING_DATABASES: '{"default":{"HOST":"db"}}'
-      SETTING_LOCAL_SETTINGS_PATH: 'local/settings.dev.py'
+      CORE_SETTING_DATABASES: '{"default":{"HOST":"db"}}'
 
 volumes:
   postgresql-data:

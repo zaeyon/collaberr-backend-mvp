@@ -10,5 +10,5 @@ $RUN_MANAGE_PY collectstatic --no-input
 echo 'Running migrations...'
 $RUN_MANAGE_PY migrate --no-input
 
-exec $RUN_MANAGE_PY runserver
+exec $RUN_MANAGE_PY runserver 0.0.0.0:8000
 
