@@ -27,6 +27,7 @@ RUN poetry install --no-root
 COPY ["README.md", "Makefile", "./"]
 COPY core core
 COPY local local
+COPY docker-compose.yml docker-compose.yml
 
 EXPOSE 8000
 
