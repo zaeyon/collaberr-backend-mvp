@@ -49,7 +49,7 @@ DATABASES = {
       'NAME': 'collaberr',
       'USER': 'postgres',
       'PASSWORD': 'collaberr',
-      'HOST': 'localhost',
+      'HOST': 'db',
       'PORT': '5432',
       'ATOMIC_REQUESTS': True,
       'CONN_MAX_AGE': 60,
@@ -125,6 +125,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         # 'rest_framework.authentication.BasicAuthentication',
     ],
+    'DEFAULT_PARSER_CLASSES': ('rest_framework.parsers.JSONParser',),
+
 }
 
 SIMPLE_JWT = {
