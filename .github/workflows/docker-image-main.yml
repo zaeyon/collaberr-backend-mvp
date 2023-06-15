@@ -20,7 +20,9 @@ jobs:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
     - name: Build Docker image
-      run: docker compose build
+      run: |
+        docker compose pull
+        docker compose build
     - name: Tag Docker images
       run: | 
         docker image tag tonylee9692/collaberr-backend:latest tonylee9692/collaberr-backend:app
