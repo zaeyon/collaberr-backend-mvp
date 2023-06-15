@@ -2,7 +2,7 @@
 **/migrations/*
 
 # Include the __init__.py file
-!**/migrations/__init__.p
+!**/migrations/__init__.py
 
 # Ignore development files
 .git
@@ -10,6 +10,7 @@
 *.pyo
 *.pyd
 *.swp
+__pycache__
 
 # Ignore static and media files (can be collected separately)
 staticfiles
