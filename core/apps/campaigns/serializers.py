@@ -7,6 +7,7 @@ class CampaignReadSerializer(serializers.ModelSerializer):
         model = Campaign
         fields = '__all__'
 
+
 class CampaignCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Campaign
@@ -24,5 +25,4 @@ class CampaignCreateSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         data = super().validate(data)
-        request = self.context.get('request')
         return data

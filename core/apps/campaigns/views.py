@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 
 # DRF imports
@@ -33,10 +32,10 @@ class CampaignViewSet(viewsets.ModelViewSet):
 
     def partial_update(self, request, *args, **kwargs):
         obj = self.get_object()
-        serializer = self.get_serializer(obj, data=request.data,partial=True, 
+        serializer = self.get_serializer(obj, data=request.data, partial=True,
                                          context={'request': request})
         serializer.is_valid(raise_exception=True)
-        campaign = serializer.save()
+        serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get_queryset(self):
@@ -53,6 +52,3 @@ class CampaignViewSet(viewsets.ModelViewSet):
         elif self.action in ['retrieve', 'update', 'delete', 'partial_update']:
             return [IsObjectOwnerOrReadOnly()]
         return super().get_permissions()
-        
-    
-
