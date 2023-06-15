@@ -22,7 +22,7 @@ jobs:
         docker compose build
     - name: Tag Docker images
       run: | 
-        docker image tag tonylee9692/collaberr-backend:latest tonylee9692/collaberr-backend-staging:app
+        docker image tag tonylee9692/collaberr-backend-staging:app tonylee9692/collaberr-backend-staging:app
     - name: Push Docker images
       run: |
         docker push tonylee9692/collaberr-backend-staging:app
