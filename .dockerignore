@@ -1,0 +1,43 @@
+# Ignore all files in the migrations directory
+**/migrations/*
+
+# Include the __init__.py file
+!**/migrations/__init__.p
+
+# Ignore development files
+.git
+*.pyc
+*.pyo
+*.pyd
+*.swp
+
+# Ignore static and media files (can be collected separately)
+staticfiles
+media
+
+# Ignore environment-specific files
+.env
+.env.*
+.env.local
+
+# Ignore Docker related files
+Dockerfile
+.dockerignore
+
+# Ignore package manager files
+node_modules
+yarn.lock
+package-lock.json
+npm-debug.log
+
+# Ignore IDE-specific files
+.vscode
+.idea
+
+# Ignore testing artifacts
+.coverage
+.pytest_cache
+
+# Ignore other project-specific files
+*.log
+*.sqlite3
