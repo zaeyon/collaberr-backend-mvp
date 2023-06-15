@@ -26,7 +26,7 @@ RUN poetry install --no-root
 # Copy project files
 COPY ["README.md", "Makefile", "./"]
 COPY core core
-COPY local local
+COPY project/settings/templates local
 
 EXPOSE 8000
 
