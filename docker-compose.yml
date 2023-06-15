@@ -15,7 +15,7 @@ services:
       - postgresql-data:/var/lib/postgresql/data
 
   app:
-    image: tonylee9692/collaberr-backend
+    image: tonylee9692/collaberr-backend:app
     build: 
       context: .
       dockerfile: Dockerfile
