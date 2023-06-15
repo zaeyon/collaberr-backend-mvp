@@ -21,13 +21,10 @@ jobs:
       run: docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
     - name: Build Docker image
       run: |
-        docker compose pull
         docker compose build
     - name: Tag Docker images
       run: | 
         docker image tag tonylee9692/collaberr-backend:latest tonylee9692/collaberr-backend:app
-        docker image tag postgres:15.3-alpine tonylee9692/collaberr-backend:db
     - name: Push Docker images
       run: |
         docker push tonylee9692/collaberr-backend:app
-        docker push tonylee9692/collaberr-backend:db
