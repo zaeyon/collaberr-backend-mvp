@@ -1,7 +1,7 @@
 # flake8: noqa
 SECRET_KEY = NotImplemented
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
