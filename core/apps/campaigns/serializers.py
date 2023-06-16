@@ -1,18 +1,24 @@
 from rest_framework import serializers
 from .models import Campaign
 
+campaign_display_fields = ['brand_name', 'title', 'thumbnail', 'category',
+                           'platform', 'start_date', 'end_date', 'description',
+                           'mission_type', 'reward', 'additional_files',
+                           'username', 'created_at', 'modified_at']
+
 
 class CampaignReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Campaign
-        fields = '__all__'
+        fields = campaign_display_fields
 
 
 class CampaignCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Campaign
-        fields = '__all__'
-        read_only_fields = ['owner', 'username']
+        fields = campaign_display_fields
+        # These fields are populated in models.py or create method
+        read_only_fields = ['username', 'created_at', 'modified_at']
 
     def create(self, validated_data):
         request = self.context.get('request')
@@ -26,3 +32,5 @@ class CampaignCreateSerializer(serializers.ModelSerializer):
     def validate(self, data):
         data = super().validate(data)
         return data
+
+# Campaign Edit field which is only editable by owner

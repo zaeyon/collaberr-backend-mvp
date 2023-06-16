@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 from django.core.validators import MaxLengthValidator
 
 from core.general.models import CreatedModified
@@ -36,7 +37,8 @@ class Campaign(CreatedModified):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     brand_name = models.TextField(validators=[MaxLengthValidator(100)])
     title = models.TextField(validators=[MaxLengthValidator(100)])
-    thumbnail = models.ImageField(upload_to='campaigns/thumbnails/', null=True, blank=True)
+    thumbnail = models.ImageField(upload_to='campaigns/thumbnails/', null=True,
+                                  blank=True)
     category = models.TextField(choices=Category.choices)
     platform = models.TextField(choices=Platform.choices)
     start_date = models.DateField()
@@ -44,10 +46,18 @@ class Campaign(CreatedModified):
     description = models.TextField()
     mission_type = models.TextField(choices=MissionType.choices)
     reward = models.PositiveIntegerField()
-    additional_files = models.FileField(upload_to='campaigns/additional_files/', null=True, blank=True)
+    additional_files = models.FileField(upload_to='campaigns/additional_files/',
+                                        null=True, blank=True)
+
     username = models.TextField(validators=[MaxLengthValidator(USER_NAME_LENGTH)])
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(editable=False)
+    modified_at = models.DateTimeField()
 
     def __str__(self):
         return f'{self.title} | {self.username}'
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.created_at = timezone.now()
+        self.modified_at = timezone.now()
+        return super().save(*args, **kwargs)
