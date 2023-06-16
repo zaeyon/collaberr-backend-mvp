@@ -3,6 +3,7 @@ from django.urls import path
 from . import views
 
 router = SimpleRouter(trailing_slash=False)
+# api/accounts
 router.register('accounts', views.AccountViewSet, basename='accounts')
 
 urlpatterns = [

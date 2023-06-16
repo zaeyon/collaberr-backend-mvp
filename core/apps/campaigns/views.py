@@ -10,15 +10,15 @@ from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
 # collaberr imports
 from .models import Campaign
 from .filters import CampaignFilter
-from core.general.permissions import IsObjectOwnerOrReadOnly
+from core.general.permissions import IsObjectOwnerOrReadOnly, IsBusiness
 from .serializers import CampaignCreateSerializer, CampaignReadSerializer
 
 
 class CampaignViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_class = CampaignFilter
-    parser_classes = [FormParser, MultiPartParser, JSONParser]
-    permission_classes = [IsObjectOwnerOrReadOnly, IsAuthenticated]
+    # parser_classes = [FormParser, MultiPartParser, JSONParser]
+    permission_classes = [IsObjectOwnerOrReadOnly, IsAuthenticated, IsBusiness]
     queryset = Campaign.objects.all()
     serializer_class = CampaignCreateSerializer
 
@@ -27,7 +27,6 @@ class CampaignViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         campaign = serializer.save()
         read_serializer = CampaignReadSerializer(campaign)
-
         return Response(read_serializer.data, status=status.HTTP_201_CREATED)
 
     def partial_update(self, request, *args, **kwargs):
@@ -48,7 +47,7 @@ class CampaignViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action == 'create':
-            return [IsAuthenticated()]
+            return [IsAuthenticated and IsBusiness()]
         elif self.action in ['retrieve', 'update', 'delete', 'partial_update']:
             return [IsObjectOwnerOrReadOnly()]
         return super().get_permissions()
