@@ -37,7 +37,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # Updated at account edit
+    # Input at account edit
     first_name = models.TextField(blank=True)
     last_name = models.TextField(blank=True)
 
