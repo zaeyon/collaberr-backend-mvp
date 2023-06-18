@@ -50,6 +50,11 @@ class AccountViewSet(ModelViewSet):
 
 
 class CustomLoginView(TokenObtainPairView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_200_OK)
+
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
         if response.status_code == status.HTTP_200_OK:
