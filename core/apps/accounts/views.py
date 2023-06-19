@@ -62,4 +62,5 @@ class CustomLoginView(TokenObtainPairView):
         if response.status_code == status.HTTP_200_OK:
             user = Account.objects.get(email=request.data['email'])
             update_last_login(None, user)
+            response.data['account_id'] = user.id
         return response

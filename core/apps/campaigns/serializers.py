@@ -22,11 +22,7 @@ class CampaignCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         request = self.context.get('request')
-        campaign = super().create({
-                **validated_data,
-                'owner': request.user,
-                'username': request.user.username,
-                })
+        campaign = super().create({**validated_data, 'owner': request.user, 'username': request.user.username})
         return campaign
 
     def validate(self, data):

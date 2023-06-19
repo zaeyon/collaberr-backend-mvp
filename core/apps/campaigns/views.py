@@ -2,10 +2,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 # DRF imports
 from rest_framework import status
-from rest_framework import viewsets
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
+from rest_framework.permissions import IsAuthenticated, AllowAny
+# from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
 
 # collaberr imports
 from .models import Campaign
@@ -14,7 +14,7 @@ from core.general.permissions import IsObjectOwnerOrReadOnly, IsBusiness
 from .serializers import CampaignCreateSerializer, CampaignReadSerializer
 
 
-class CampaignViewSet(viewsets.ModelViewSet):
+class CampaignViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_class = CampaignFilter
     # parser_classes = [FormParser, MultiPartParser, JSONParser]
@@ -50,4 +50,12 @@ class CampaignViewSet(viewsets.ModelViewSet):
             return [IsAuthenticated and IsBusiness()]
         elif self.action in ['retrieve', 'update', 'delete', 'partial_update']:
             return [IsObjectOwnerOrReadOnly()]
+        elif self.action == 'get':
+            return [AllowAny()]
         return super().get_permissions()
+
+
+class CampaignReadOnlyViewSet(ReadOnlyModelViewSet):
+    queryset = Campaign.objects.all()
+    serializer_class = CampaignReadSerializer
+    permission_classes = [AllowAny]
