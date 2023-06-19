@@ -20,13 +20,13 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
     # Created at account creation
     id = models.TextField(
-            primary_key=True,
-            unique=True,
-            validators=[
-                HexStringValidator(ACCOUNT_ID_LENGTH),
-                MaxLengthValidator(ACCOUNT_ID_LENGTH),
-                ]
-            )
+        primary_key=True,
+        unique=True,
+        validators=[
+            HexStringValidator(ACCOUNT_ID_LENGTH),
+            MaxLengthValidator(ACCOUNT_ID_LENGTH),
+        ]
+    )
     username = models.TextField(unique=True, validators=[MaxLengthValidator(USER_NAME_LENGTH)])
     password = models.TextField()
     email = models.EmailField(unique=True, validators=[EmailValidator()])
@@ -71,12 +71,12 @@ class Creator(models.Model):
         verbose_name_plural = 'Creators'
 
     account_id = models.OneToOneField(
-            settings.AUTH_USER_MODEL,
-            on_delete=models.CASCADE,
-            primary_key=True,
-            related_name='creator',
-            db_column='account_id',
-            )
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        primary_key=True,
+        related_name='creator',
+        db_column='account_id',
+    )
     earnings = models.PositiveIntegerField(default=0)
 
 
@@ -87,9 +87,9 @@ class Business(models.Model):
         verbose_name_plural = 'Businesses'
 
     account_id = models.OneToOneField(
-            settings.AUTH_USER_MODEL,
-            on_delete=models.CASCADE,
-            primary_key=True,
-            related_name='business',
-            db_column='account_id',
-            )
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        primary_key=True,
+        related_name='business',
+        db_column='account_id',
+    )
