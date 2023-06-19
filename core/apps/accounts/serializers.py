@@ -14,8 +14,8 @@ class AccountCreateSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         password = data.get('password')
-        confirm_password = data.get('confirm_password')
-        if password != confirm_password:
+        password_confirm = data.pop('password_confirm')
+        if password != password_confirm:
             raise serializers.ValidationError("Passwords do not match.")
         return data
 
