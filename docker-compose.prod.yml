@@ -29,6 +29,7 @@ services:
       CORE_SETTING_LOCAL_SETTINGS_PATH: 'core/project/settings/templates/settings.dev.py'
   
   frontend:
+    image: wodus5677/collaberr-web:app
     build:
       context: ../collaberr-web
     ports:
