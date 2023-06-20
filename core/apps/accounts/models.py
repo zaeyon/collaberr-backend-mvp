@@ -1,10 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from django.conf import settings
 from django.core.validators import MaxLengthValidator, EmailValidator
 
 from core.general.validators import HexStringValidator
 from core.general.constants import ACCOUNT_ID_LENGTH, USER_NAME_LENGTH
+from core.apps.creators.models import Creator
+from core.apps.businesses.models import Business
 from .managers import AccountManager
 
 
@@ -62,34 +63,3 @@ class Account(AbstractBaseUser, PermissionsMixin):
                 Creator.objects.create(account_id=self)
             elif self.role == Account.Roles.BUSINESS:
                 Business.objects.create(account_id=self)
-
-
-class Creator(models.Model):
-    class Meta:
-        db_table = 'creators'
-        verbose_name = 'Creator'
-        verbose_name_plural = 'Creators'
-
-    account_id = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        primary_key=True,
-        related_name='creator',
-        db_column='account_id',
-    )
-    earnings = models.PositiveIntegerField(default=0)
-
-
-class Business(models.Model):
-    class Meta:
-        db_table = 'businesses'
-        verbose_name = 'Business'
-        verbose_name_plural = 'Businesses'
-
-    account_id = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        primary_key=True,
-        related_name='business',
-        db_column='account_id',
-    )

@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.contrib.auth.models import update_last_login
 
 # DRF imports
@@ -13,6 +14,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import AccountCreateSerializer, AccountUpdateSerializer
 from .models import Account
 from core.general.permissions import IsAccountOwnerOrAdmin
+from core.general.constants import REFRESH_TOKEN_LIFETIME, ACCESS_TOKEN_LIFETIME
+from core.apps.authentications.models import Token
 
 
 class AccountViewSet(ModelViewSet):
@@ -63,4 +66,16 @@ class CustomLoginView(TokenObtainPairView):
             user = Account.objects.get(email=request.data['email'])
             update_last_login(None, user)
             response.data['account_id'] = user.id
+            refresh_token = response.data['refresh']
+            access_token = response.data['access']
+            # Instantiate token model
+            # if user.last_login is None or \
+            # Token.objects.filter(account_id=user.id, refresh_expires_at__lte=timezone.now()).exists():
+            Token.objects.create(account_id=user,
+                                 refresh_token=refresh_token,
+                                 access_token=access_token,
+                                 refresh_expires_at=timezone.now() + REFRESH_TOKEN_LIFETIME,
+                                 access_expires_at=timezone.now() + ACCESS_TOKEN_LIFETIME)
+            response.set_cookie('refresh_token', refresh_token, httponly=True)
+            response.set_cookie('access_token', access_token, httponly=True)
         return response
