@@ -2,7 +2,7 @@ import os.path
 from pathlib import Path
 from datetime import timedelta
 from split_settings.tools import include, optional
-
+from core.general.constants import REFRESH_TOKEN_LIFETIME, ACCESS_TOKEN_LIFETIME
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 ENVVAR_SETTINGS_PREFIX = 'CORE_SETTING_'

@@ -16,6 +16,9 @@ INSTALLED_APPS = [
     # Collaberr apps
     "core.apps.accounts.apps.AccountsConfig",
     "core.apps.campaigns.apps.CampaignsConfig",
+    "core.apps.creators.apps.CreatorsConfig",
+    "core.apps.businesses.apps.BusinessesConfig",
+    "core.apps.authentications.apps.AuthenticationsConfig",
 
     # Third party apps
     "django_filters",
@@ -124,9 +127,12 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': ACCESS_TOKEN_LIFETIME,
+    'REFRESH_TOKEN_LIFETIME': REFRESH_TOKEN_LIFETIME,
 }
+
+SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_HTTPONLY = True
 
 STATIC_ROOT = "/static/"
 STATICFILES_DIRS = ((BASE_DIR / "core/static"),)  # type: ignore
