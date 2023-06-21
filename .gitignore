@@ -83,3 +83,6 @@ venv/
 .DS_Store
 .idea
 .vscode
+
+# secrets
+client_secret.json
