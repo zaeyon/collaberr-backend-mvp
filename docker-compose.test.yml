@@ -44,6 +44,11 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
+    profiles:
+      - pgadmin
+    logging:
+      driver: none
+
 volumes:
   postgresql-data:
     driver: local

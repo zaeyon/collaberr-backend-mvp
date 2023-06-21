@@ -1,8 +1,9 @@
 from django.urls import path
-from rest_framework_simplejwt import views as jwt_views
-from .views import CustomTokenRefreshView
+from .views import CustomTokenRefreshView, YoutubeAuthView, YoutubeCallbackView, YoutubeRevokeView
 
 urlpatterns = [
-    # path('refresh-token/', views.TokenRefreshView.as_view(), name='refresh-token'),
     path('token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
+    path('youtube/auth/', YoutubeAuthView.as_view(), name='youtube_auth'),
+    path('youtube/oauth2callback/', YoutubeCallbackView.as_view(), name='youtube_callback'),
+    path('youtube/revoke/', YoutubeRevokeView.as_view(), name='youtube_revoke'),
 ]
