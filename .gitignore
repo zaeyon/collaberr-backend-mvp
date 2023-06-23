@@ -86,3 +86,6 @@ venv/
 
 # secrets
 client_secret.json
+
+Dockerfile.test
+
