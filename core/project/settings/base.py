@@ -14,11 +14,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     # Collaberr apps
-    "core.apps.accounts.apps.AccountsConfig",
-    "core.apps.campaigns.apps.CampaignsConfig",
-    "core.apps.creators.apps.CreatorsConfig",
-    "core.apps.businesses.apps.BusinessesConfig",
-    "core.apps.authentications.apps.AuthenticationsConfig",
+    "core.api.accounts.apps.AccountsConfig",
+    "core.api.campaigns.apps.CampaignsConfig",
+    "core.api.creators.apps.CreatorsConfig",
+    "core.api.businesses.apps.BusinessesConfig",
+    "core.api.authentications.apps.AuthenticationsConfig",
 
     # Third party apps
     "django_filters",
@@ -30,13 +30,13 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
 ]
 
 DATABASES = {
@@ -119,7 +119,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        # 'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ],
     'DEFAULT_PARSER_CLASSES': ('rest_framework.parsers.JSONParser',),
 
@@ -147,3 +147,4 @@ STATIC_URL = "/static/"
 MEDIA_URL = "/media/"
 ROOT_URLCONF = "core.project.urls"
 CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True

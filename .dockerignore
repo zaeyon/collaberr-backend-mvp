@@ -44,4 +44,4 @@ npm-debug.log
 *.sqlite3
 
 # Secrets
-client_secret.json
+

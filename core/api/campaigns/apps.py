@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class AuthenticationsConfig(AppConfig):
+class CampaignsConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "core.apps.authentications"
+    name = "core.api.campaigns"
