@@ -106,5 +106,5 @@ class CustomLoginView(generics.GenericAPIView):
                     access_expires_at=timezone.now() + settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
                 )
             response.set_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'], access_token, httponly=True)
-            response.set_cookie('account_id', user.id, httponly=True)
+            response.set_cookie('account_id', user.id, httponly=False)
         return response
