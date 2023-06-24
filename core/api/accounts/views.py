@@ -2,6 +2,7 @@ from django.utils import timezone
 from django.contrib.auth.models import update_last_login
 from django.http import HttpResponse
 from django.conf import settings
+from django.middleware import csrf
 
 # DRF imports
 from rest_framework.viewsets import ModelViewSet
@@ -27,6 +28,11 @@ class AccountViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
     serializer_class = AccountCreateSerializer
     queryset = Account.objects.none()
+
+    def retrieve(self, request, *args, **kwargs):
+        account = self.get_object()
+        serializer = self.get_serializer(account)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -105,6 +111,7 @@ class CustomLoginView(generics.GenericAPIView):
                     refresh_expires_at=timezone.now() + settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
                     access_expires_at=timezone.now() + settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
                 )
+            csrf.get_token(request)
             response.set_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'], access_token, httponly=True)
             response.set_cookie('account_id', user.id, httponly=False)
         return response
