@@ -1,6 +1,5 @@
 # collaberr improts
 from .models import JWTToken
-from core.general.constants import ACCESS_TOKEN_LIFETIME
 from .serializers import YoutubeCredentialsSerializer
 # drf imports
 from rest_framework.response import Response
@@ -14,6 +13,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils import timezone
+from django.conf import settings
 # google imports
 from google_auth_oauthlib.flow import Flow
 import requests
@@ -26,7 +26,6 @@ REDIRECT_URI = "http://localhost:8000/api/youtube/oauth2callback/"
 
 
 class CustomTokenRefreshView(TokenRefreshView):
-    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
@@ -42,7 +41,7 @@ class CustomTokenRefreshView(TokenRefreshView):
         token = RefreshToken(refresh_token)
         access_token = str(token.access_token)
         token_obj.access_token = access_token
-        token_obj.access_expires_at = timezone.now() + ACCESS_TOKEN_LIFETIME
+        token_obj.access_expires_at = timezone.now() + settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
         token_obj.save()
 
         response = Response({'access_token': access_token})
@@ -52,7 +51,6 @@ class CustomTokenRefreshView(TokenRefreshView):
 
 
 class YoutubeAuthView(APIView):
-    authentication_classes = [JWTAuthentication]
     permission_classes = [AllowAny]
 
     def get(self, request):
@@ -72,7 +70,6 @@ class YoutubeAuthView(APIView):
 
 
 class YoutubeCallbackView(APIView):
-    authentication_classes = [JWTAuthentication]
     permission_classes = [AllowAny]
 
     def get(self, request):
@@ -99,7 +96,6 @@ class YoutubeCallbackView(APIView):
 
 
 class YoutubeConfirmView(APIView):
-    authentication_classes = [JWTAuthentication]
     permission_classes = [AllowAny]
     # SECURITY WARNING, Don't pass in through URL and need authentication!
 
@@ -117,7 +113,6 @@ class YoutubeConfirmView(APIView):
 
 
 class YoutubeRevokeView(APIView):
-    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
