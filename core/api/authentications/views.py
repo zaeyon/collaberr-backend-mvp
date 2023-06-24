@@ -18,7 +18,6 @@ from django.utils import timezone
 from google_auth_oauthlib.flow import Flow
 import requests
 from urllib.parse import urlencode, parse_qs, urlparse
-import json
 
 
 CLIENT_SECRETS_FILE = "client_secret.json"
@@ -96,7 +95,6 @@ class YoutubeCallbackView(APIView):
         })
 
         response = HttpResponseRedirect(redirect_url)
-        # response.set_cookie('youtube_credentials', youtube_credentials, httponly=True)
         return response
 
 
@@ -107,12 +105,10 @@ class YoutubeConfirmView(APIView):
 
     def get(self, request):
         url = request.build_absolute_uri()
-        print(url, " url from DJANGO")
         url_components = urlparse(url)
         params = parse_qs(url_components.query)
         params = {key: value[0] for key, value in params.items()}
 
-        print(params, " params from DJANGO")
         serializer = YoutubeCredentialsSerializer(data=params, context={'request': request})
         if serializer.is_valid(raise_exception=True):
             serializer.save()
