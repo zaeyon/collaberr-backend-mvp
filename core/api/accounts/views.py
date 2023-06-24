@@ -12,9 +12,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework import generics
 
 # JWT imports
-# from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
-from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.authentication import AUTH_HEADER_TYPES
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -78,7 +76,6 @@ class CustomLoginView(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        print(request.data)
         try:
             serializer.is_valid(raise_exception=True)
         except TokenError as e:
@@ -88,14 +85,12 @@ class CustomLoginView(generics.GenericAPIView):
         user = Account.objects.get(email=request.data['email'])
         serializer.validated_data['account_id'] = user.id
         tokens = serializer.validated_data
-        print(tokens)
         if response.status_code == status.HTTP_200_OK:
             user = Account.objects.get(email=request.data['email'])
             update_last_login(None, user)
 
             refresh_token = tokens['refresh']
             access_token = tokens['access']
-            print("login success")
             try:
                 token = JWTToken.objects.get(account_id=user)
                 if token:
@@ -112,7 +107,6 @@ class CustomLoginView(generics.GenericAPIView):
                     refresh_expires_at=timezone.now() + REFRESH_TOKEN_LIFETIME,
                     access_expires_at=timezone.now() + ACCESS_TOKEN_LIFETIME
                 )
-            print("object created")
             response.set_cookie('access', access_token, httponly=True)
             response.set_cookie('account_id', user.id, httponly=True)
         return response
