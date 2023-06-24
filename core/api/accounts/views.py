@@ -1,6 +1,7 @@
 from django.utils import timezone
 from django.contrib.auth.models import update_last_login
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
 
 # DRF imports
 from rest_framework.viewsets import ModelViewSet
@@ -59,7 +60,7 @@ class CustomLoginView(TokenObtainPairView):
     permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_200_OK)
+        return HttpResponse(status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
@@ -85,6 +86,5 @@ class CustomLoginView(TokenObtainPairView):
                     refresh_expires_at=timezone.now() + REFRESH_TOKEN_LIFETIME,
                     access_expires_at=timezone.now() + ACCESS_TOKEN_LIFETIME
                 )
-            response.set_cookie('refresh_token', refresh_token, httponly=True)
-            response.set_cookie('access_token', access_token, httponly=True)
+
         return response

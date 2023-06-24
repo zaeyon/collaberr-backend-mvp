@@ -34,9 +34,9 @@ class YoutubeCredential(models.Model):
         db_column='account_id',
         primary_key=True,
     )
-    token = models.CharField(max_length=255)
-    refresh_token = models.CharField(max_length=255)
-    token_uri = models.CharField(max_length=255)
-    client_id = models.CharField(max_length=255)
-    client_secret = models.CharField(max_length=255)
+    token = models.TextField()
+    refresh_token = models.TextField()
+    token_uri = models.TextField()
+    client_id = models.TextField()
+    client_secret = models.TextField()
     scope = models.TextField()
