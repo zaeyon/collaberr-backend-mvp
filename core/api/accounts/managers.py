@@ -1,5 +1,6 @@
 from django.contrib.auth.models import BaseUserManager
 
+
 class AccountManager(BaseUserManager):
     def _create_user(self, email, password, **extra_fields):
         """Create and save a User with the given email and password."""
