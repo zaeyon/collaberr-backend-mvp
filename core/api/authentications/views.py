@@ -1,6 +1,7 @@
 # collaberr improts
 from .models import JWTToken
 from .serializers import YoutubeCredentialsSerializer
+from core.general.authentication import CustomJWTAuthentication
 # drf imports
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -8,7 +9,6 @@ from rest_framework.views import APIView
 # drf_simplejwt imports
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
-from rest_framework_simplejwt.authentication import JWTAuthentication
 # django imports
 from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import redirect
@@ -51,7 +51,8 @@ class CustomTokenRefreshView(TokenRefreshView):
 
 
 class YoutubeAuthView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [CustomJWTAuthentication]
 
     def get(self, request):
         if request.user.is_authenticated:
@@ -71,6 +72,7 @@ class YoutubeAuthView(APIView):
 
 class YoutubeCallbackView(APIView):
     permission_classes = [AllowAny]
+    authentication_classes = [CustomJWTAuthentication]
 
     def get(self, request):
         flow = Flow.from_client_secrets_file(
@@ -98,6 +100,7 @@ class YoutubeCallbackView(APIView):
 class YoutubeConfirmView(APIView):
     permission_classes = [AllowAny]
     # SECURITY WARNING, Don't pass in through URL and need authentication!
+    authentication_classes = [CustomJWTAuthentication]
 
     def get(self, request):
         url = request.build_absolute_uri()
@@ -114,6 +117,7 @@ class YoutubeConfirmView(APIView):
 
 class YoutubeRevokeView(APIView):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [CustomJWTAuthentication]
 
     def get(self, request):
         revoke_url = 'https://oauth2.googleapis.com/revoke'
