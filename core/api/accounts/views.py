@@ -1,6 +1,7 @@
 from django.utils import timezone
+from django.utils.module_loading import import_string
 from django.contrib.auth.models import update_last_login
-from django.shortcuts import get_object_or_404
+# from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
 
 # DRF imports
@@ -8,9 +9,14 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
+from rest_framework import generics
 
 # JWT imports
-from rest_framework_simplejwt.views import TokenObtainPairView
+# from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
+from rest_framework_simplejwt.settings import api_settings
+from rest_framework_simplejwt.authentication import AUTH_HEADER_TYPES
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 # collaberr imports
 from .serializers import AccountCreateSerializer, AccountUpdateSerializer
@@ -56,20 +62,40 @@ class AccountViewSet(ModelViewSet):
         return [AllowAny()]
 
 
-class CustomLoginView(TokenObtainPairView):
+class CustomLoginView(generics.GenericAPIView):
     permission_classes = [AllowAny]
+    serializer_class = TokenObtainPairSerializer
+    www_authenticate_realm = "api"
+
+    def get_authenticate_header(self, request):
+        return '{} realm="{}"'.format(
+            AUTH_HEADER_TYPES[0],
+            self.www_authenticate_realm,
+        )
 
     def get(self, request, *args, **kwargs):
         return HttpResponse(status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        print(request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
+
+        response = HttpResponse(status=status.HTTP_200_OK)
+        user = Account.objects.get(email=request.data['email'])
+        serializer.validated_data['account_id'] = user.id
+        tokens = serializer.validated_data
+        print(tokens)
         if response.status_code == status.HTTP_200_OK:
             user = Account.objects.get(email=request.data['email'])
             update_last_login(None, user)
-            response.data['account_id'] = user.id
-            refresh_token = response.data['refresh']
-            access_token = response.data['access']
+
+            refresh_token = tokens['refresh']
+            access_token = tokens['access']
+            print("login success")
             try:
                 token = JWTToken.objects.get(account_id=user)
                 if token:
@@ -86,5 +112,7 @@ class CustomLoginView(TokenObtainPairView):
                     refresh_expires_at=timezone.now() + REFRESH_TOKEN_LIFETIME,
                     access_expires_at=timezone.now() + ACCESS_TOKEN_LIFETIME
                 )
-
+            print("object created")
+            response.set_cookie('access', access_token, httponly=True)
+            response.set_cookie('account_id', user.id, httponly=True)
         return response
