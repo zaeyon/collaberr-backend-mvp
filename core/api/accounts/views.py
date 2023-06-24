@@ -1,8 +1,10 @@
 from django.utils import timezone
-from django.utils.module_loading import import_string
 from django.contrib.auth.models import update_last_login
-# from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
+from django.conf import settings
+from django.middleware import csrf
+from django.contrib.auth import authenticate, login
+
 
 # DRF imports
 from rest_framework.viewsets import ModelViewSet
@@ -20,7 +22,6 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .serializers import AccountCreateSerializer, AccountUpdateSerializer
 from .models import Account
 from core.general.permissions import IsAccountOwnerOrAdmin
-from core.general.constants import REFRESH_TOKEN_LIFETIME, ACCESS_TOKEN_LIFETIME
 from core.api.authentications.models import JWTToken
 
 
@@ -29,6 +30,11 @@ class AccountViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
     serializer_class = AccountCreateSerializer
     queryset = Account.objects.none()
+
+    def retrieve(self, request, *args, **kwargs):
+        account = self.get_object()
+        serializer = self.get_serializer(account)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -85,9 +91,12 @@ class CustomLoginView(generics.GenericAPIView):
         user = Account.objects.get(email=request.data['email'])
         serializer.validated_data['account_id'] = user.id
         tokens = serializer.validated_data
-        if response.status_code == status.HTTP_200_OK:
-            user = Account.objects.get(email=request.data['email'])
-            update_last_login(None, user)
+
+        authenticated_user = authenticate(request, email=request.data['email'], password=request.data['password'])
+        if authenticated_user:
+            login(request, authenticated_user)
+
+            update_last_login(None, authenticated_user)
 
             refresh_token = tokens['refresh']
             access_token = tokens['access']
@@ -96,17 +105,18 @@ class CustomLoginView(generics.GenericAPIView):
                 if token:
                     token.refresh_token = refresh_token
                     token.access_token = access_token
-                    token.refresh_expires_at = timezone.now() + REFRESH_TOKEN_LIFETIME
-                    token.access_expires_at = timezone.now() + ACCESS_TOKEN_LIFETIME
+                    token.refresh_expires_at = timezone.now() + settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME']
+                    token.access_expires_at = timezone.now() + settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
                     token.save()
             except JWTToken.DoesNotExist:
                 JWTToken.objects.create(
                     account_id=user,
                     refresh_token=refresh_token,
                     access_token=access_token,
-                    refresh_expires_at=timezone.now() + REFRESH_TOKEN_LIFETIME,
-                    access_expires_at=timezone.now() + ACCESS_TOKEN_LIFETIME
+                    refresh_expires_at=timezone.now() + settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
+                    access_expires_at=timezone.now() + settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
                 )
-            response.set_cookie('access', access_token, httponly=True)
-            response.set_cookie('account_id', user.id, httponly=True)
+            csrf.get_token(request)
+            response.set_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'], access_token, httponly=True, secure=True, samesite='None')
+            response.set_cookie('account_id', user.id, httponly=False)
         return response
