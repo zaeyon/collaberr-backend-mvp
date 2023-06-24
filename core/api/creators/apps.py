@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class AccountsConfig(AppConfig):
+class CreatorsConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "core.apps.accounts"
+    name = "core.api.creators"

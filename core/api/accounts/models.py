@@ -4,8 +4,8 @@ from django.core.validators import MaxLengthValidator, EmailValidator
 
 from core.general.validators import HexStringValidator
 from core.general.constants import ACCOUNT_ID_LENGTH, USER_NAME_LENGTH
-from core.apps.creators.models import Creator
-from core.apps.businesses.models import Business
+from core.api.creators.models import Creator
+from core.api.businesses.models import Business
 from .managers import AccountManager
 
 

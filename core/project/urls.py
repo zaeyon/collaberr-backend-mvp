@@ -7,8 +7,8 @@ API_PREFIX = "api/"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path(API_PREFIX, include("core.apps.accounts.urls")),
-    path(API_PREFIX, include("core.apps.campaigns.urls")),
-    path(API_PREFIX, include("core.apps.authentications.urls")),
+    path(API_PREFIX, include("core.api.accounts.urls")),
+    path(API_PREFIX, include("core.api.campaigns.urls")),
+    path(API_PREFIX, include("core.api.authentications.urls")),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
