@@ -1,8 +1,7 @@
 from django.utils import timezone
-from django.utils.module_loading import import_string
 from django.contrib.auth.models import update_last_login
-# from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
+from django.conf import settings
 
 # DRF imports
 from rest_framework.viewsets import ModelViewSet
@@ -20,7 +19,6 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .serializers import AccountCreateSerializer, AccountUpdateSerializer
 from .models import Account
 from core.general.permissions import IsAccountOwnerOrAdmin
-from core.general.constants import REFRESH_TOKEN_LIFETIME, ACCESS_TOKEN_LIFETIME
 from core.api.authentications.models import JWTToken
 
 
@@ -96,17 +94,17 @@ class CustomLoginView(generics.GenericAPIView):
                 if token:
                     token.refresh_token = refresh_token
                     token.access_token = access_token
-                    token.refresh_expires_at = timezone.now() + REFRESH_TOKEN_LIFETIME
-                    token.access_expires_at = timezone.now() + ACCESS_TOKEN_LIFETIME
+                    token.refresh_expires_at = timezone.now() + settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME']
+                    token.access_expires_at = timezone.now() + settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
                     token.save()
             except JWTToken.DoesNotExist:
                 JWTToken.objects.create(
                     account_id=user,
                     refresh_token=refresh_token,
                     access_token=access_token,
-                    refresh_expires_at=timezone.now() + REFRESH_TOKEN_LIFETIME,
-                    access_expires_at=timezone.now() + ACCESS_TOKEN_LIFETIME
+                    refresh_expires_at=timezone.now() + settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
+                    access_expires_at=timezone.now() + settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
                 )
-            response.set_cookie('access', access_token, httponly=True)
+            response.set_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'], access_token, httponly=True)
             response.set_cookie('account_id', user.id, httponly=True)
         return response
