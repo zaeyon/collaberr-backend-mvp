@@ -133,6 +133,7 @@ SIMPLE_JWT = {
 
 SESSION_COOKIE_SECURE = False
 SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = "Lax"
 
 STATIC_ROOT = "/static/"
 STATICFILES_DIRS = ((BASE_DIR / "core/static"),)  # type: ignore

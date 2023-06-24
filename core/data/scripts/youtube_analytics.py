@@ -37,5 +37,3 @@ def get_youtube_analytics_data(request):
 
     except HttpError as error:
         return JsonResponse({'error': str(error)}, status=500)
-CLIENT_SECRETS_FILE = "client_secret.json"
-SCOPES = ['https://www.googleapis.com/auth/yt-analytics.readonly']

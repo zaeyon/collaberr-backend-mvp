@@ -17,7 +17,8 @@ from django.utils import timezone
 # google imports
 from google_auth_oauthlib.flow import Flow
 import requests
-from urllib.parse import urlencode, parse_qs
+from urllib.parse import urlencode, parse_qs, urlparse
+import json
 
 
 CLIENT_SECRETS_FILE = "client_secret.json"
@@ -53,7 +54,7 @@ class CustomTokenRefreshView(TokenRefreshView):
 
 class YoutubeAuthView(APIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request):
         if request.user.is_authenticated:
@@ -85,24 +86,44 @@ class YoutubeCallbackView(APIView):
         flow.fetch_token(authorization_response=authorization_response)
 
         credentials = flow.credentials
-        request.session['youtube_credentials'] = {
+        redirect_url = 'http://localhost:8000/api/youtube/confirm/?' + urlencode({
             'token': credentials.token,
             'refresh_token': credentials.refresh_token,
             'token_uri': credentials.token_uri,
             'client_id': credentials.client_id,
             'client_secret': credentials.client_secret,
-            'scope': credentials.scopes[0]
-        }
-        # access_token = request.headers.get('Authorization', '').replace('Bearer ', '')
+            'scope': credentials.scopes[0],
+        })
 
-        redirect_url = 'http://localhost:3000/campaigns'
         response = HttpResponseRedirect(redirect_url)
-        # response['Authorization'] = f'Bearer {access_token}'
-
+        # response.set_cookie('youtube_credentials', youtube_credentials, httponly=True)
         return response
 
 
+class YoutubeConfirmView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [AllowAny]
+    # SECURITY WARNING, Don't pass in through URL and need authentication!
+
+    def get(self, request):
+        url = request.build_absolute_uri()
+        print(url, " url from DJANGO")
+        url_components = urlparse(url)
+        params = parse_qs(url_components.query)
+        params = {key: value[0] for key, value in params.items()}
+
+        print(params, " params from DJANGO")
+        serializer = YoutubeCredentialsSerializer(data=params, context={'request': request})
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return redirect('http://localhost:3000/youtubeConfirm/')
+        return HttpResponseBadRequest('Invalid parameters')
+
+
 class YoutubeRevokeView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         revoke_url = 'https://oauth2.googleapis.com/revoke'
         params = {'token': request.session['credentials']['token']}
@@ -113,18 +134,3 @@ class YoutubeRevokeView(APIView):
             return HttpResponse('Successfully disconnected')
         else:
             return HttpResponseBadRequest('Failed to disconnect Youtube account')
-
-
-class DummyView(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        youtube_credentials = request.data.get('youtube_credentials')
-        if request.user.is_authenticated and youtube_credentials:
-            serializer = YoutubeCredentialsSerializer(account_id=request.user, data=youtube_credentials)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response('Successfully connected Youtube account')
-            return Response(serializer.errors, status=400)
-        return Response('Invalid or missing credentials', status=400)
