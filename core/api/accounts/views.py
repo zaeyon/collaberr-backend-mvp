@@ -3,6 +3,8 @@ from django.contrib.auth.models import update_last_login
 from django.http import HttpResponse
 from django.conf import settings
 from django.middleware import csrf
+from django.contrib.auth import authenticate, login
+
 
 # DRF imports
 from rest_framework.viewsets import ModelViewSet
@@ -89,9 +91,12 @@ class CustomLoginView(generics.GenericAPIView):
         user = Account.objects.get(email=request.data['email'])
         serializer.validated_data['account_id'] = user.id
         tokens = serializer.validated_data
-        if response.status_code == status.HTTP_200_OK:
-            user = Account.objects.get(email=request.data['email'])
-            update_last_login(None, user)
+
+        authenticated_user = authenticate(request, email=request.data['email'], password=request.data['password'])
+        if authenticated_user:
+            login(request, authenticated_user)
+
+            update_last_login(None, authenticated_user)
 
             refresh_token = tokens['refresh']
             access_token = tokens['access']
@@ -112,6 +117,6 @@ class CustomLoginView(generics.GenericAPIView):
                     access_expires_at=timezone.now() + settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
                 )
             csrf.get_token(request)
-            response.set_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'], access_token, httponly=True)
+            response.set_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'], access_token, httponly=True, secure=True, samesite='None')
             response.set_cookie('account_id', user.id, httponly=False)
         return response
