@@ -38,4 +38,11 @@ class AccountCreateSerializer(serializers.ModelSerializer):
 class AccountUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ['username', 'email', 'first_name', 'last_name']
+        fields = ['username', 'first_name', 'last_name']
+
+
+# Fields that I can view with "view profile" link
+class AccountViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ['username', 'first_name', 'last_name', 'email', 'role']

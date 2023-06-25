@@ -3,7 +3,6 @@ from .models import Account
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.utils.translation import gettext_lazy as _
 
-# admin.site.register(Account)
 
 @admin.register(Account)
 class AccountAdmin(DjangoUserAdmin):
@@ -12,8 +11,7 @@ class AccountAdmin(DjangoUserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name')}),
-        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
-                                      )}),
+        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser')}),
         # (_('Important dates'), {'fields': ('last_login')}),
     )
     add_fieldsets = (

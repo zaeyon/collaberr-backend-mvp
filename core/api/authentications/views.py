@@ -71,7 +71,7 @@ class YoutubeAuthView(APIView):
 
 
 class YoutubeCallbackView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     authentication_classes = [CustomJWTAuthentication]
 
     def get(self, request):
@@ -98,7 +98,7 @@ class YoutubeCallbackView(APIView):
 
 
 class YoutubeConfirmView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     # SECURITY WARNING, Don't pass in through URL and need authentication!
     authentication_classes = [CustomJWTAuthentication]
 
