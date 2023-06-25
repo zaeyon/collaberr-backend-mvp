@@ -18,7 +18,7 @@ from rest_framework_simplejwt.authentication import AUTH_HEADER_TYPES
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 # collaberr imports
-from .serializers import AccountCreateSerializer, AccountUpdateSerializer
+from .serializers import AccountCreateSerializer, AccountUpdateSerializer, AccountViewSerializer
 from .models import Account
 from core.general.permissions import IsAccountOwnerOrAdmin
 from core.api.authentications.models import JWTToken
@@ -55,8 +55,10 @@ class AccountViewSet(ModelViewSet):
         return super().get_queryset()
 
     def get_serializer_class(self):
-        if self.action in ['retrieve', 'update', 'delete', 'partial_update']:
+        if self.action in ['update', 'delete', 'partial_update']:
             return AccountUpdateSerializer
+        elif self.action in ['retrieve']:
+            return AccountViewSerializer
         return AccountCreateSerializer
 
     def get_permissions(self):
@@ -129,4 +131,5 @@ class LogoutView(generics.GenericAPIView):
         response = HttpResponse(status=status.HTTP_200_OK)
         response.delete_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'])
         response.delete_cookie('account_id')
+        response.delete_cookie('sessionid')
         return response
