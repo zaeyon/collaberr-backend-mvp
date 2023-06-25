@@ -5,12 +5,11 @@ from django.conf import settings
 from django.middleware import csrf
 from django.contrib.auth import authenticate, login
 
-
 # DRF imports
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import generics
 
 # JWT imports
@@ -66,6 +65,7 @@ class AccountViewSet(ModelViewSet):
         return [AllowAny()]
 
 
+# SECURITY WARNING: TO DO, Hash tokens
 class CustomLoginView(generics.GenericAPIView):
     permission_classes = [AllowAny]
     serializer_class = TokenObtainPairSerializer
@@ -119,4 +119,14 @@ class CustomLoginView(generics.GenericAPIView):
             csrf.get_token(request)
             response.set_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'], access_token, httponly=True, secure=True, samesite='None')
             response.set_cookie('account_id', user.id, httponly=False)
+        return response
+
+
+class LogoutView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        response = HttpResponse(status=status.HTTP_200_OK)
+        response.delete_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'])
+        response.delete_cookie('account_id')
         return response
