@@ -38,4 +38,4 @@ class AccountCreateSerializer(serializers.ModelSerializer):
 class AccountUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
-        fields = ['username', 'email', 'first_name', 'last_name']
+        fields = ['username', 'first_name', 'last_name']

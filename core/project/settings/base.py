@@ -114,7 +114,7 @@ USE_TZ = True
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'core.general.authentication.CustomJWTAuthentication',
@@ -171,6 +171,8 @@ SESSION_COOKIE_SAMESITE = "Lax"
 # SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SAMESITE = 'None'
 # SESSION_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_NAME = 'csrftoken'
+CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN'
 
 STATIC_ROOT = "/static/"
 STATICFILES_DIRS = ((BASE_DIR / "core/static"),)  # type: ignore
