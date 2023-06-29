@@ -119,7 +119,9 @@ class CustomLoginView(generics.GenericAPIView):
                     access_expires_at=timezone.now() + settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
                 )
             csrf.get_token(request)
+            # SECURITY WARNING: Encryption needed
             response.set_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'], access_token, httponly=True, secure=True, samesite='None')
+            response.set_cookie('refresh_token', refresh_token, httponly=True, secure=True, samesite='None')
             response.set_cookie('account_id', user.id, httponly=False)
         return response
 
