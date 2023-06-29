@@ -16,3 +16,4 @@ class Creator(models.Model):
         db_column='account_id',
     )
     earnings = models.PositiveIntegerField(default=0)
+    channel_id = models.CharField(max_length=255, null=True, blank=True)
