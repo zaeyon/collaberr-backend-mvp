@@ -33,7 +33,7 @@ class Campaign(CreatedModified):
         REEL = 'Reel'
         IGTV = 'IGTV'
         TIKTOK_VIDEO = 'Tiktok Video'
-
+    id = models.TextField(primary_key=True, unique=True, editable=False)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     brand_name = models.TextField(validators=[MaxLengthValidator(100)])
     title = models.TextField(validators=[MaxLengthValidator(100)])
@@ -41,6 +41,8 @@ class Campaign(CreatedModified):
                                   blank=True)
     category = models.TextField(choices=Category.choices)
     platform = models.TextField(choices=Platform.choices)
+    recruit_start_date = models.DateField()
+    recruit_end_date = models.DateField()
     start_date = models.DateField()
     end_date = models.DateField()
     description = models.TextField()

@@ -3,8 +3,9 @@ from .models import Campaign
 
 campaign_display_fields = ['brand_name', 'title', 'thumbnail', 'category',
                            'platform', 'start_date', 'end_date', 'description',
+                           'recruit_start_date', 'recruit_end_date',
                            'mission_type', 'reward', 'additional_files',
-                           'username', 'created_at', 'modified_at']
+                           'username', 'created_at', 'modified_at', 'id']
 
 
 class CampaignReadSerializer(serializers.ModelSerializer):
@@ -18,7 +19,7 @@ class CampaignCreateSerializer(serializers.ModelSerializer):
         model = Campaign
         fields = campaign_display_fields
         # These fields are populated in models.py or create method
-        read_only_fields = ['username', 'created_at', 'modified_at']
+        read_only_fields = ['username', 'created_at', 'modified_at', 'id']
 
     def create(self, validated_data):
         request = self.context.get('request')
@@ -30,3 +31,4 @@ class CampaignCreateSerializer(serializers.ModelSerializer):
         return data
 
 # Campaign Edit field which is only editable by owner
+
