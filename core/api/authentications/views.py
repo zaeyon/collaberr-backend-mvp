@@ -4,7 +4,7 @@ from .serializers import YoutubeCredentialsSerializer
 from core.general.authentication import CustomJWTAuthentication
 # drf imports
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 # drf_simplejwt imports
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -20,7 +20,6 @@ import requests
 from urllib.parse import urlencode, parse_qs, urlparse
 
 
-CLIENT_SECRETS_FILE = "client_secret.json"
 SCOPES = ['https://www.googleapis.com/auth/yt-analytics.readonly']
 REDIRECT_URI = "http://localhost:8000/api/youtube/oauth2callback/"
 
@@ -57,7 +56,7 @@ class YoutubeAuthView(APIView):
     def get(self, request):
         if request.user.is_authenticated:
             flow = Flow.from_client_secrets_file(
-                CLIENT_SECRETS_FILE,
+                settings.YOUTUBE_SECRETS_FILE,
                 scopes=SCOPES,
                 redirect_uri=REDIRECT_URI
             )
@@ -76,7 +75,7 @@ class YoutubeCallbackView(APIView):
 
     def get(self, request):
         flow = Flow.from_client_secrets_file(
-            CLIENT_SECRETS_FILE,
+            settings.YOUTUBE_SECRETS_FILE,
             scopes=SCOPES,
             redirect_uri=REDIRECT_URI,
         )

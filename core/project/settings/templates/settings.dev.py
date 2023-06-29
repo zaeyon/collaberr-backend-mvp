@@ -9,5 +9,6 @@ LOGGING['formatters']['colored'] = {  # type: ignore
 }
 LOGGING['loggers']['core']['level'] = 'DEBUG'  # type: ignore
 LOGGING['handlers']['console']['level'] = 'DEBUG'  # type: ignore
-LOGGING['handlers']['console']['formatter'] = 'colored'  # type: ignore                                      
+LOGGING['handlers']['console']['formatter'] = 'colored'  # type: ignore
 
+YOUTUBE_SECRETS_FILE = BASE_DIR / 'youtube_secret.json'

@@ -85,7 +85,7 @@ venv/
 .vscode
 
 # secrets
-client_secret.json
+*_secret.json
 
 Dockerfile.test
 
