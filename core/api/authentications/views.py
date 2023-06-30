@@ -21,7 +21,9 @@ import requests
 from urllib.parse import urlencode, parse_qs, urlparse
 
 
-SCOPES = ['https://www.googleapis.com/auth/yt-analytics.readonly']
+SCOPES = ['https://www.googleapis.com/auth/yt-analytics.readonly',
+          'https://www.googleapis.com/auth/yt-analytics-monetary.readonly',
+          ]
 REDIRECT_URI = "http://localhost:8000/api/youtube/oauth2callback/"
 
 

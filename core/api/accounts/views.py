@@ -134,4 +134,5 @@ class LogoutView(generics.GenericAPIView):
         response.delete_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'])
         response.delete_cookie('account_id')
         response.delete_cookie('sessionid')
+        response.delete_cookie('refresh_token')
         return response
