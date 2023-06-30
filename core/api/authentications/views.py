@@ -6,6 +6,7 @@ from core.general.authentication import CustomJWTAuthentication
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+from rest_framework import status
 # drf_simplejwt imports
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
@@ -20,12 +21,15 @@ import requests
 from urllib.parse import urlencode, parse_qs, urlparse
 
 
-SCOPES = ['https://www.googleapis.com/auth/yt-analytics.readonly']
+SCOPES = ['https://www.googleapis.com/auth/yt-analytics.readonly',
+          'https://www.googleapis.com/auth/yt-analytics-monetary.readonly',
+          ]
 REDIRECT_URI = "http://localhost:8000/api/youtube/oauth2callback/"
 
 
 class CustomTokenRefreshView(TokenRefreshView):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [CustomJWTAuthentication]
 
     def post(self, request, *args, **kwargs):
         refresh_token = request.COOKIES.get('refresh_token')
@@ -43,9 +47,9 @@ class CustomTokenRefreshView(TokenRefreshView):
         token_obj.access_expires_at = timezone.now() + settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME']
         token_obj.save()
 
-        response = Response({'access_token': access_token})
+        response = HttpResponse(status=status.HTTP_200_OK)
         # SECURITY WARNING: Don't store access_token in cookie in production
-        response.set_cookie('access_token', access_token, httponly=True)
+        response.set_cookie('access_token', access_token, httponly=True, secure=True, samesite='None')
         return response
 
 

@@ -12,6 +12,7 @@ from .models import Campaign
 from .filters import CampaignFilter
 from core.general.permissions import IsObjectOwnerOrReadOnly, IsBusiness
 from .serializers import CampaignCreateSerializer, CampaignReadSerializer
+from core.general.authentication import CustomJWTAuthentication
 
 
 class CampaignViewSet(ModelViewSet):
@@ -21,6 +22,7 @@ class CampaignViewSet(ModelViewSet):
     permission_classes = [IsObjectOwnerOrReadOnly, IsAuthenticated, IsBusiness]
     queryset = Campaign.objects.all()
     serializer_class = CampaignCreateSerializer
+    authentication_classes = [CustomJWTAuthentication]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, context={'request': request})
