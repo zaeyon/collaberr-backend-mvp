@@ -33,8 +33,16 @@ class Campaign(CreatedModified):
         REEL = 'Reel'
         IGTV = 'IGTV'
         TIKTOK_VIDEO = 'Tiktok Video'
-    id = models.AutoField(primary_key=True, unique=True, editable=False)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    id = models.AutoField(
+            primary_key=True,
+            unique=True,
+            editable=False
+            )
+    owner = models.ForeignKey(
+            settings.AUTH_USER_MODEL,
+            on_delete=models.CASCADE
+            )
     brand_name = models.TextField(validators=[MaxLengthValidator(100)])
     title = models.TextField(validators=[MaxLengthValidator(100)])
     thumbnail = models.ImageField(upload_to='campaigns/thumbnails/', null=True,

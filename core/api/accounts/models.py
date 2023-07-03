@@ -28,9 +28,15 @@ class Account(AbstractBaseUser, PermissionsMixin):
             MaxLengthValidator(ACCOUNT_ID_LENGTH),
         ]
     )
-    username = models.TextField(unique=True, validators=[MaxLengthValidator(USER_NAME_LENGTH)])
+    username = models.TextField(
+            unique=True,
+            validators=[MaxLengthValidator(USER_NAME_LENGTH)]
+        )
     password = models.TextField()
-    email = models.EmailField(unique=True, validators=[EmailValidator()])
+    email = models.EmailField(
+            unique=True,
+            validators=[EmailValidator()]
+        )
     role = models.TextField(choices=Roles.choices)
     balance = models.IntegerField(default=0)
     is_active = models.BooleanField(default=True)
