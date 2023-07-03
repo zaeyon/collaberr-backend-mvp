@@ -1,29 +1,26 @@
-# collaberr improts
-from .models import JWTToken
-from .serializers import YoutubeCredentialsSerializer
-from core.general.authentication import CustomJWTAuthentication
+import requests
+from urllib.parse import urlencode, parse_qs, urlparse
+# django imports
+from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse, HttpResponseForbidden, HttpResponseRedirect
+from django.shortcuts import redirect
+from django.utils import timezone
+from django.conf import settings
 # drf imports
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework import status
 # drf_simplejwt imports
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
-# django imports
-from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse, HttpResponseForbidden, HttpResponseRedirect
-from django.shortcuts import redirect
-from django.utils import timezone
-from django.conf import settings
 # google imports
 from google_auth_oauthlib.flow import Flow
-import requests
-from urllib.parse import urlencode, parse_qs, urlparse
+# collaberr imports
+from .models import JWTToken
+from .serializers import YoutubeCredentialsSerializer
+from core.general.authentication import CustomJWTAuthentication
 
 
-SCOPES = ['https://www.googleapis.com/auth/yt-analytics.readonly',
-          'https://www.googleapis.com/auth/yt-analytics-monetary.readonly',
-          ]
+SCOPES = ['https://www.googleapis.com/auth/yt-analytics.readonly']
 REDIRECT_URI = "http://localhost:8000/api/youtube/oauth2callback/"
 
 
@@ -48,7 +45,7 @@ class CustomTokenRefreshView(TokenRefreshView):
         token_obj.save()
 
         response = HttpResponse(status=status.HTTP_200_OK)
-        # SECURITY WARNING: Don't store access_token in cookie in production
+        # SECURITY WARNING: Don't store access_token in cookie in production or Hash it
         response.set_cookie('access_token', access_token, httponly=True, secure=True, samesite='None')
         return response
 

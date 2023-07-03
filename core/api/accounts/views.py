@@ -93,7 +93,7 @@ class CustomLoginView(generics.GenericAPIView):
         user = Account.objects.get(email=request.data['email'])
         serializer.validated_data['account_id'] = user.id
         tokens = serializer.validated_data
-
+        # TO DO: Make this into Model Manager
         authenticated_user = authenticate(request, email=request.data['email'], password=request.data['password'])
         if authenticated_user:
             login(request, authenticated_user)
