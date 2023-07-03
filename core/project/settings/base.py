@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
     "corsheaders",
+    "graphene_django",
 ]
 
 MIDDLEWARE = [
@@ -51,6 +52,9 @@ DATABASES = {
       'CONN_MAX_AGE': 60,
    }
 }
+
+# GRAPHENE = {
+    
 
 TEMPLATES = [
     {
