@@ -11,5 +11,6 @@ urlpatterns = [
     path(API_PREFIX, include("core.api.campaigns.urls")),
     path(API_PREFIX, include("core.api.authentications.urls")),
     path(API_PREFIX, include("core.api.creators.urls")),
+    path(API_PREFIX, include("core.api.youtube_analytics.urls")),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -9,7 +9,6 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-django = "4.2.2"
 djangorestframework = "^3.14.0"
 django-filter = "^23.1"
 flake8 = "^6.0.0"
