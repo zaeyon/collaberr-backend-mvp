@@ -102,6 +102,7 @@ class CustomLoginView(generics.GenericAPIView):
 
             refresh_token = tokens['refresh']
             access_token = tokens['access']
+            # TO DO: Handle this with Model Manager
             try:
                 token = JWTToken.objects.get(account_id=user)
                 if token:
@@ -126,6 +127,7 @@ class CustomLoginView(generics.GenericAPIView):
         return response
 
 
+# TO DO: Is there an exsiting django view?
 class LogoutView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 

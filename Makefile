@@ -1,4 +1,4 @@
-.PHONY: install migrate makemigrations runserver superuser update test
+.PHONY: install migrate makemigrations runserver superuser update test flush
 
 install:
 	poetry install
@@ -23,6 +23,9 @@ shell:
 
 test:
 	poetry run pytest -v -rs -n auto --show-capture=no
+
+flush:
+	poetry run python3 -m core.manage flush
 
 
 .PHONY: up-dependencies-only

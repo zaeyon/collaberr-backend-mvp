@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     "core.api.creators.apps.CreatorsConfig",
     "core.api.businesses.apps.BusinessesConfig",
     "core.api.authentications.apps.AuthenticationsConfig",
+    "core.api.youtube_analytics.apps.YoutubeAnalyticsConfig",
 
     # Third party apps
     "django_filters",

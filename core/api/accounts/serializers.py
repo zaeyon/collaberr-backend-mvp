@@ -22,10 +22,15 @@ class AccountCreateSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         password = validated_data.pop('password')
         # validate that the account_id is unique in the database
+        # TO DO: find a better way, maybe use a UUID
         while True:
             account_id = self.generate_account_id()
             try:
-                user = Account.objects.create_user(**validated_data, id=account_id, password=password)
+                user = Account.objects.create_user(
+                        **validated_data,
+                        id=account_id,
+                        password=password
+                    )
                 return user
             except IntegrityError:
                 continue
