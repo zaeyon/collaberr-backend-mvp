@@ -1355,4 +1355,4 @@ argon2 = ["argon2-cffi"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "1edb6155e9c348603b3678f5a34b174079873de925725c52c2b92bad03a202b1"
+content-hash = "7c286b4fd66c5928d0a408d58bc77f7408a8b1df6d692ac094bc60a1b6f46a93"
