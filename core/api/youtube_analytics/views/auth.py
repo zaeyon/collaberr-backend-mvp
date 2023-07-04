@@ -107,8 +107,8 @@ class YoutubeConfirmView(APIView):
         serializer = YoutubeCredentialsSerializer(data=params, context={'request': request})
         creator = Creator.objects.get(account_id=request.user.id)
         if serializer.is_valid(raise_exception=True):
-            creator.verify_channel(**serializer.validated_data)
-            serializer.save()
+            if creator.verify_channel(**serializer.validated_data):
+                serializer.save()
             return redirect('http://localhost:3000/youtubeConfirm/')
         return HttpResponseBadRequest('Invalid parameters')
 

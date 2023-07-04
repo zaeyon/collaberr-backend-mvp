@@ -44,3 +44,5 @@ class Creator(models.Model):
             self.channel_verified = True
             self.save()
             return True
+        else:
+            raise Exception('Channel could not be verified')
