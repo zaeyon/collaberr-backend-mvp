@@ -1,5 +1,5 @@
-from youtube_analytics import YouTubeQueryHook
-from youtube_reports import YouTubeReportHook
+from query import YouTubeQueryHook
+from report import YouTubeReportHook
 import argparse
 
 parser = argparse.ArgumentParser()

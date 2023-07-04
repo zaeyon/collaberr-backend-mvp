@@ -47,5 +47,4 @@ class CustomJWTAuthentication(JWTAuthentication):
 
         if not user.is_active:
             raise AuthenticationFailed(_("User is inactive"), code="user_inactive")
-        print(user, type(user))
         return user
