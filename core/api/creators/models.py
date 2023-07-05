@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.db import models
 from django.conf import settings
 
@@ -30,10 +28,11 @@ class Creator(models.Model):
         Verify channel based on query result from
         credentials and channel_id
         """
+        from datetime import date, timedelta
         query_params = {
             'channel_id': self.channel_id,
-            'start_date': datetime.date.today() - datetime.timedelta(days=5),
-            'end_date': datetime.date.today() - datetime.timedelta(days=3),
+            'start_date': date.today() - timedelta(days=5),
+            'end_date': date.today() - timedelta(days=3),
             'metrics': 'views',
             'dimensions': 'day',
             'sort': '-views',

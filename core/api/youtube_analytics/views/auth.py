@@ -10,7 +10,6 @@ from rest_framework.views import APIView
 from google_auth_oauthlib.flow import Flow
 # collaberr imports
 from core.api.youtube_analytics.serializers import YoutubeCredentialsSerializer
-from core.api.creators.serializers import CreatorModelSerializer
 from core.api.creators.models import Creator
 
 SCOPES = ['https://www.googleapis.com/auth/yt-analytics.readonly']
@@ -57,6 +56,7 @@ class YoutubeAuthView(APIView):
                 creator = Creator.objects.get(account_id=account_id)
                 creator.channel_id = request.data['channel_id']
                 creator.channel_name = request.data['channel_name']
+                creator.save()
             except Creator.DoesNotExist:
                 JsonResponse({'error': 'Creator does not exist'})
 
