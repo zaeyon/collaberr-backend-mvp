@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     "core.api.creators.apps.CreatorsConfig",
     "core.api.businesses.apps.BusinessesConfig",
     "core.api.authentications.apps.AuthenticationsConfig",
+    "core.api.youtube_analytics.apps.YoutubeAnalyticsConfig",
 
     # Third party apps
     "django_filters",
@@ -26,6 +27,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
     "corsheaders",
+    "graphene_django",
 ]
 
 MIDDLEWARE = [
@@ -51,6 +53,9 @@ DATABASES = {
       'CONN_MAX_AGE': 60,
    }
 }
+
+# GRAPHENE = {
+    
 
 TEMPLATES = [
     {

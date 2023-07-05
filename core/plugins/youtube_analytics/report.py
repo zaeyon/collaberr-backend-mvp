@@ -1,9 +1,9 @@
-import os
+from io import FileIO
 import google.oauth2.credentials
 from googleapiclient.discovery import build
+from googleapiclient.http import MediaIoBaseDownload
 
-SCOPES = ['https://www.googleapis.com/auth/yt-analytics.readonly',
-          'https://www.googleapis.com/auth/yt-analytics-monetary.readonly']
+SCOPES = ['https://www.googleapis.com/auth/yt-analytics.readonly']
 API_SERVICE_NAME = 'youtubereporting'
 API_VERSION = 'v1'
 
@@ -12,7 +12,13 @@ class YouTubeReportHook:
     """
     Plugin to retrieve YouTube Report for User
     Ex. yt_report_hook = YouTubeReportHook(**credentials)
-        yt_report_hook 
+        yt_report_hook.get_report_types()
+        yt_report_hook.create_reporting_job('channel_traffic_source_a2', 'Traffic Source')
+        yt_report_hook.list_reporting_jobs()
+        yt_report_hook.retrieve_reports(job_id='')
+        yt_report_hook.download_report(report_url='',
+                                       local_file='')
+
     """
     def __init__(self, **kwargs):
         self.service = self.get_service(**kwargs)
@@ -111,3 +117,19 @@ class YouTubeReportHook:
                 print("No reports found.")
         except Exception as e:
             print(f"An error occurred: {str(e)}")
+
+    def download_report(self, report_url, local_file):
+        request = self.service.media().download(
+            resourceName=' '
+        )
+        request.uri = report_url
+        fh = FileIO(local_file, mode='wb')
+        # Stream/download the report in a single request.
+        downloader = MediaIoBaseDownload(fh, request, chunksize=-1)
+
+        done = False
+        while done is False:
+            status, done = downloader.next_chunk()
+        if status:
+            print('Download %d%%.' % int(status.progress() * 100))
+        print('Download Complete!')

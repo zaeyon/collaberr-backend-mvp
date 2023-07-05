@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 
+from core.plugins.youtube_analytics.query import YouTubeQueryHook
+
 
 class Creator(models.Model):
     class Meta:
@@ -17,3 +19,29 @@ class Creator(models.Model):
     )
     earnings = models.PositiveIntegerField(default=0)
     channel_id = models.CharField(max_length=255, null=True, blank=True)
+    channel_name = models.CharField(max_length=255, null=True, blank=True)
+    channel_verified = models.BooleanField(default=False)
+
+    # Could be a better way to verify channel but this works for now
+    def verify_channel(self, **credentials):
+        """
+        Verify channel based on query result from
+        credentials and channel_id
+        """
+        from datetime import date, timedelta
+        query_params = {
+            'channel_id': self.channel_id,
+            'start_date': date.today() - timedelta(days=5),
+            'end_date': date.today() - timedelta(days=3),
+            'metrics': 'views',
+            'dimensions': 'day',
+            'sort': '-views',
+        }
+        youtube_query_hook = YouTubeQueryHook(**credentials)
+        query_result = youtube_query_hook.get_query(**query_params)
+        if query_result:
+            self.channel_verified = True
+            self.save()
+            return True
+        else:
+            raise Exception('Channel could not be verified')
