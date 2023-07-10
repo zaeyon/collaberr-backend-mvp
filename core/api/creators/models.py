@@ -26,7 +26,7 @@ class Creator(models.Model):
     channel_handle = models.CharField(max_length=255, null=True, blank=True)
     channel_verified = models.BooleanField(default=False)
 
-    def get_channel_id_from_handle(channel_handle: str):
+    def get_channel_id_from_handle(self, channel_handle: str):
         if channel_handle.find('@') == -1:
             channel_handle = '@' + channel_handle
         url = 'https://www.youtube.com/' + channel_handle

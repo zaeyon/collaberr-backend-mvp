@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.core.validators import MaxLengthValidator
 
 from core.general.models import CreatedModified
-from core.general.constants import USER_NAME_LENGTH
+from core.api.creators.models import Creator
 
 
 class Campaign(CreatedModified):
@@ -38,15 +38,19 @@ class Campaign(CreatedModified):
             primary_key=True,
             unique=True,
             editable=False
-            )
+        )
     owner = models.ForeignKey(
             settings.AUTH_USER_MODEL,
             on_delete=models.CASCADE
-            )
+        )
+    # fields that business owners fill
     brand_name = models.TextField(validators=[MaxLengthValidator(100)])
     title = models.TextField(validators=[MaxLengthValidator(100)])
-    thumbnail = models.ImageField(upload_to='campaigns/thumbnails/', null=True,
-                                  blank=True)
+    thumbnail = models.ImageField(
+                            upload_to='campaigns/thumbnails/',
+                            null=True,
+                            blank=True
+                        )
     category = models.TextField(choices=Category.choices)
     platform = models.TextField(choices=Platform.choices)
     recruit_start_date = models.DateField()
@@ -56,12 +60,37 @@ class Campaign(CreatedModified):
     description = models.TextField()
     mission_type = models.TextField(choices=MissionType.choices)
     reward = models.PositiveIntegerField()
-    additional_files = models.FileField(upload_to='campaigns/additional_files/',
-                                        null=True, blank=True)
-
-    username = models.TextField(validators=[MaxLengthValidator(USER_NAME_LENGTH)])
+    additional_files = models.FileField(
+                            upload_to='campaigns/additional_files/',
+                            null=True,
+                            blank=True
+                        )
+    # auto populated fields
     created_at = models.DateTimeField(editable=False)
     modified_at = models.DateTimeField()
+    is_draft = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_recruiting = models.BooleanField(default=True)
+    is_recruited = models.BooleanField(default=False)
+    is_completed = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
+
+    # creator actions
+    requested_creators = models.ManyToManyField(
+                                Creator,
+                                related_name='requested_campaigns',
+                                blank=True
+                            )
+    approved_creators = models.ManyToManyField(
+                                Creator,
+                                related_name='approved_campaigns',
+                                blank=True
+                            )
+    rejected_creators = models.ManyToManyField(
+                                Creator,
+                                related_name='rejected_campaigns',
+                                blank=True
+                            )
 
     def __str__(self):
         return f'{self.title} | {self.username}'

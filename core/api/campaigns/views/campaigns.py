@@ -8,10 +8,10 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 # from rest_framework.parsers import FormParser, MultiPartParser, JSONParser
 
 # collaberr imports
-from .models import Campaign
-from .filters import CampaignFilter
+from core.api.campaigns.models import Campaign
+from core.api.campaigns.filters import CampaignFilter
+from core.api.campaigns.serializers import CampaignCreateSerializer, CampaignReadSerializer
 from core.general.permissions import IsObjectOwnerOrReadOnly, IsBusiness
-from .serializers import CampaignCreateSerializer, CampaignReadSerializer
 from core.general.authentication import CustomJWTAuthentication
 
 
