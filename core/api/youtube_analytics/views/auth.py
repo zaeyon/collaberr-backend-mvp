@@ -54,8 +54,9 @@ class YoutubeAuthView(APIView):
             account_id = request.user.id
             try:
                 creator = Creator.objects.get(account_id=account_id)
-                creator.channel_id = request.data['channel_id']
-                creator.channel_name = request.data['channel_name']
+                creator.channel_handle = request.data['channel_handle']
+                # creator.channel_id = request.data['channel_id']
+                # creator.channel_name = request.data['channel_name']
                 creator.save()
             except Creator.DoesNotExist:
                 JsonResponse({'error': 'Creator does not exist'})
