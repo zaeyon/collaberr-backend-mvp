@@ -4,9 +4,9 @@ from django.conf import settings
 
 class YoutubeCredential(models.Model):
     class Meta:
-        db_table = 'youtubecredential'
-        verbose_name = 'YoutubeCredential'
-        verbose_name_plural = 'YoutubeCredentials'
+        db_table = 'youtube_credential'
+        verbose_name = 'Youtube Credential'
+        verbose_name_plural = 'Youtube Credentials'
 
     account_id = models.OneToOneField(
         settings.AUTH_USER_MODEL,

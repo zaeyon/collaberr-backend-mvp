@@ -11,9 +11,12 @@ from google_auth_oauthlib.flow import Flow
 # collaberr imports
 from core.api.youtube_analytics.serializers import YoutubeCredentialsSerializer
 from core.api.creators.models import Creator
+import logging
 
 SCOPES = ['https://www.googleapis.com/auth/yt-analytics.readonly']
 REDIRECT_URI = "http://localhost:8000/api/youtube/oauth2callback/"
+
+logger = logging.getLogger(__name__)
 
 
 class YoutubeAuthView(APIView):
@@ -78,6 +81,8 @@ class YoutubeCallbackView(APIView):
         )
         authorization_response = request.build_absolute_uri()
         flow.fetch_token(authorization_response=authorization_response)
+        logger.info(request.user)
+        logger.info(request.user.is_authenticated)
 
         credentials = flow.credentials
         redirect_url = 'http://localhost:8000/api/youtube/confirm/?' + urlencode({
@@ -103,7 +108,8 @@ class YoutubeConfirmView(APIView):
         url_components = urlparse(url)
         params = parse_qs(url_components.query)
         params = {key: value[0] for key, value in params.items()}
-        print(request.user)
+        logger.info(params)
+        logger.info(request.user.is_authenticated)
 
         serializer = YoutubeCredentialsSerializer(data=params, context={'request': request})
         creator = Creator.objects.get(account_id=request.user.id)
