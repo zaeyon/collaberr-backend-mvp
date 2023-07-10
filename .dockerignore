@@ -1,9 +1,3 @@
-# Ignore all files in the migrations directory
-**/migrations/*
-
-# Include the __init__.py file
-!**/migrations/__init__.py
-
 # Ignore development files
 .git
 *.pyc
