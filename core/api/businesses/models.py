@@ -11,7 +11,7 @@ class Business(models.Model):
     account_id = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        primary_key=True,
         related_name='business',
         db_column='account_id',
     )
+    id = models.AutoField(primary_key=True)

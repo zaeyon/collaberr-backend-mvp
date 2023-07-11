@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import YoutubeChannelRegisterView
+from core.api.creators.views import request_to_join_campaign
 
 
 urlpatterns = [
-    path("creator/register/youtube/", YoutubeChannelRegisterView.as_view()),
+    path('creator/join-campaign/', request_to_join_campaign),
 ]

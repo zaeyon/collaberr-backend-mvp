@@ -20,9 +20,9 @@ class CampaignViewSet(ModelViewSet):
     filterset_class = CampaignFilter
     # parser_classes = [FormParser, MultiPartParser, JSONParser]
     permission_classes = [IsObjectOwnerOrReadOnly, IsAuthenticated, IsBusiness]
-    queryset = Campaign.objects.all()
     serializer_class = CampaignCreateSerializer
     authentication_classes = [CustomJWTAuthentication]
+    queryset = Campaign.objects.filter(is_active=True).order_by('-created_at').all()
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, context={'request': request})
@@ -61,6 +61,7 @@ class CampaignViewSet(ModelViewSet):
 
 
 class CampaignReadOnlyViewSet(ReadOnlyModelViewSet):
+    # paginate the queryset
     queryset = Campaign.objects.all()
     serializer_class = CampaignReadSerializer
     permission_classes = [AllowAny]
