@@ -4,7 +4,9 @@ from django.utils import timezone
 from django.core.validators import MaxLengthValidator
 
 from core.general.models import CreatedModified
-from core.api.creators.models import Creator
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 class Campaign(CreatedModified):
@@ -77,23 +79,38 @@ class Campaign(CreatedModified):
 
     # creator actions
     requested_creators = models.ManyToManyField(
-                                Creator,
-                                related_name='requested_campaigns',
+                                'creators.Creator',
+                                related_name='campaigns_requested',
                                 blank=True
                             )
     approved_creators = models.ManyToManyField(
-                                Creator,
-                                related_name='approved_campaigns',
+                                'creators.Creator',
+                                related_name='campaigns_approved',
                                 blank=True
                             )
-    rejected_creators = models.ManyToManyField(
-                                Creator,
-                                related_name='rejected_campaigns',
+    declined_creators = models.ManyToManyField(
+                                'creators.Creator',
+                                related_name='campaigns_declined',
                                 blank=True
                             )
 
+    def add_requested_creator(self, creator):
+        self.requested_creators.add(creator)
+        logger.info(f'{creator} requested to join {self}')
+        self.save()
+
+    def add_approved_creator(self, creator):
+        self.approved_creators.add(creator)
+        logger.info(f'{creator} approved to join {self}')
+        self.save()
+
+    def add_declined_creator(self, creator):
+        self.declined_creators.add(creator)
+        logger.info(f'{creator} declined to join {self}')
+        self.save()
+
     def __str__(self):
-        return f'{self.title} | {self.username}'
+        return f'{self.title} | {self.brand_name}'
 
     def save(self, *args, **kwargs):
         if not self.id:

@@ -1,8 +1,9 @@
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils import timezone
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 # drf imports
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import status
 # drf_simplejwt imports
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -10,6 +11,9 @@ from rest_framework_simplejwt.views import TokenRefreshView
 # collaberr imports
 from .models import JWTToken
 from core.general.authentication import CustomJWTAuthentication
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 class CustomTokenRefreshView(TokenRefreshView):

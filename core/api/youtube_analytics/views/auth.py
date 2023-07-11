@@ -116,7 +116,9 @@ class YoutubeConfirmView(APIView):
         if serializer.is_valid(raise_exception=True):
             if creator.verify_channel(**serializer.validated_data):
                 serializer.save()
-            return redirect('http://localhost:3000/youtubeConfirm/')
+                return redirect('http://localhost:3000/youtubeConfirm/')
+            else:
+                return HttpResponseBadRequest('Invalid channel')
         return HttpResponseBadRequest('Invalid parameters')
 
 

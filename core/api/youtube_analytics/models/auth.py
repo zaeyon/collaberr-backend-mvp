@@ -14,6 +14,12 @@ class YoutubeCredential(models.Model):
         db_column='account_id',
         primary_key=True,
     )
+    creator_id = models.ForeignKey(
+        'creators.Creator',
+        on_delete=models.CASCADE,
+        db_column='creator_id',
+        related_name='youtube_credentials',
+    )
     token = models.TextField()
     refresh_token = models.TextField()
     token_uri = models.TextField()

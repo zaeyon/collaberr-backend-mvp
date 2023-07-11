@@ -13,10 +13,11 @@ class Creator(models.Model):
         verbose_name = 'Creator'
         verbose_name_plural = 'Creators'
 
+    id = models.AutoField(primary_key=True)
+
     account_id = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        primary_key=True,
         related_name='creator',
         db_column='account_id',
     )
@@ -25,6 +26,13 @@ class Creator(models.Model):
     channel_name = models.CharField(max_length=255, null=True, blank=True)
     channel_handle = models.CharField(max_length=255, null=True, blank=True)
     channel_verified = models.BooleanField(default=False)
+
+    def request_campaign(self, campaign):
+        if campaign not in self.requested_campaigns.all():
+            self.requested_campaigns.add(campaign)
+            self.save()
+        else:
+            raise Exception('Already requested')
 
     def get_channel_id_from_handle(self, channel_handle: str):
         if channel_handle.find('@') == -1:
