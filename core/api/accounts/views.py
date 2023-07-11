@@ -23,6 +23,10 @@ from .models import Account
 from core.general.permissions import IsAccountOwnerOrAdmin
 from core.api.authentications.models import JWTToken
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class AccountViewSet(ModelViewSet):
     permission_classes = [AllowAny]
@@ -33,12 +37,14 @@ class AccountViewSet(ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         account = self.get_object()
         serializer = self.get_serializer(account)
+        logger.info(f"Account retrieved: {serializer.data}")
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        logger.info(f"Account created: {serializer.data}")
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     # Handle account update
@@ -47,6 +53,7 @@ class AccountViewSet(ModelViewSet):
         serializer = self.get_serializer(account, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        logger.info(f"Account updated: {serializer.data}")
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get_queryset(self):
@@ -124,6 +131,7 @@ class CustomLoginView(generics.GenericAPIView):
             response.set_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'], access_token, httponly=True, secure=True, samesite='None')
             response.set_cookie('refresh_token', refresh_token, httponly=True, secure=True, samesite='None')
             response.set_cookie('account_id', user.id, httponly=False)
+            logger.info(f"Account logged in: {user.email}")
         return response
 
 
@@ -137,4 +145,5 @@ class LogoutView(generics.GenericAPIView):
         response.delete_cookie('account_id')
         response.delete_cookie('sessionid')
         response.delete_cookie('refresh_token')
+        logger.info(f"Account logged out: {request.user.email}")
         return response

@@ -4,15 +4,21 @@ from django.conf import settings
 
 class YoutubeCredential(models.Model):
     class Meta:
-        db_table = 'youtubecredential'
-        verbose_name = 'YoutubeCredential'
-        verbose_name_plural = 'YoutubeCredentials'
+        db_table = 'youtube_credential'
+        verbose_name = 'Youtube Credential'
+        verbose_name_plural = 'Youtube Credentials'
 
     account_id = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         db_column='account_id',
         primary_key=True,
+    )
+    creator_id = models.ForeignKey(
+        'creators.Creator',
+        on_delete=models.CASCADE,
+        db_column='creator_id',
+        related_name='youtube_credentials',
     )
     token = models.TextField()
     refresh_token = models.TextField()

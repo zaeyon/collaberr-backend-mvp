@@ -3,6 +3,9 @@ from django.conf import settings
 
 from core.plugins.youtube_analytics.query import YouTubeQueryHook
 
+import requests
+import re
+
 
 class Creator(models.Model):
     class Meta:
@@ -10,17 +13,45 @@ class Creator(models.Model):
         verbose_name = 'Creator'
         verbose_name_plural = 'Creators'
 
+    id = models.AutoField(primary_key=True)
+
     account_id = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        primary_key=True,
         related_name='creator',
         db_column='account_id',
     )
     earnings = models.PositiveIntegerField(default=0)
     channel_id = models.CharField(max_length=255, null=True, blank=True)
     channel_name = models.CharField(max_length=255, null=True, blank=True)
+    channel_handle = models.CharField(max_length=255, null=True, blank=True)
     channel_verified = models.BooleanField(default=False)
+
+    def request_campaign(self, campaign):
+        if campaign not in self.requested_campaigns.all():
+            self.requested_campaigns.add(campaign)
+            self.save()
+        else:
+            raise Exception('Already requested')
+
+    def get_channel_id_from_handle(self, channel_handle: str):
+        if channel_handle.find('@') == -1:
+            channel_handle = '@' + channel_handle
+        url = 'https://www.youtube.com/' + channel_handle
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            channel_id = re.findall(
+                '<meta itemprop="identifier" content="([^"]*)"',
+                response.text
+            )[0]
+            channel_name = re.findall(
+                '<meta itemprop="name" content="([^"]*)"',
+                response.text
+            )[0]
+            return channel_id, channel_name
+        else:
+            return False
 
     # Could be a better way to verify channel but this works for now
     def verify_channel(self, **credentials):
@@ -29,6 +60,7 @@ class Creator(models.Model):
         credentials and channel_id
         """
         from datetime import date, timedelta
+        self.channel_id, self.channel_name = self.get_channel_id_from_handle(self.channel_handle)
         query_params = {
             'channel_id': self.channel_id,
             'start_date': date.today() - timedelta(days=5),
