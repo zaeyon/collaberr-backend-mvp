@@ -95,17 +95,26 @@ class Campaign(CreatedModified):
                             )
 
     def add_requested_creator(self, creator):
+        if creator in self.requested_creators.all():
+            logger.info(f'{creator} already requested to join {self}')
+            raise Exception(f'{creator} already requested to join {self}')
         self.requested_creators.add(creator)
         logger.info(f'{creator} requested to join {self}')
         self.save()
 
     def add_approved_creator(self, creator):
+        self.requested_creators.remove(creator)
         self.approved_creators.add(creator)
+        if creator in self.declined_creators.all():
+            self.declined_creators.remove(creator)
         logger.info(f'{creator} approved to join {self}')
         self.save()
 
     def add_declined_creator(self, creator):
+        self.requested_creators.remove(creator)
         self.declined_creators.add(creator)
+        if creator in self.approved_creators.all():
+            self.approved_creators.remove(creator)
         logger.info(f'{creator} declined to join {self}')
         self.save()
 
