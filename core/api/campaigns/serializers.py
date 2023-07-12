@@ -19,7 +19,7 @@ class CampaignCreateSerializer(serializers.ModelSerializer):
         model = Campaign
         fields = '__all__'
         # These fields are populated in models.py or create method
-        read_only_fields = ['created_at', 'modified_at', 'id']
+        read_only_fields = ['owner', 'created_at', 'modified_at', 'id']
 
     def create(self, validated_data):
         request = self.context.get('request')
