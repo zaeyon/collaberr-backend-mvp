@@ -1,10 +1,12 @@
+import requests
+import re
+
+# django imports
 from django.db import models
 from django.conf import settings
 
+# collaberr imports
 from core.plugins.youtube_analytics.query import YouTubeQueryHook
-
-import requests
-import re
 
 
 class Creator(models.Model):
@@ -22,9 +24,9 @@ class Creator(models.Model):
         db_column='account_id',
     )
     earnings = models.PositiveIntegerField(default=0)
-    channel_id = models.CharField(max_length=255, null=True, blank=True)
-    channel_name = models.CharField(max_length=255, null=True, blank=True)
-    channel_handle = models.CharField(max_length=255, null=True, blank=True)
+    channel_id = models.CharField(max_length=100, null=True, blank=True)
+    channel_name = models.CharField(max_length=100, null=True, blank=True)
+    channel_handle = models.CharField(max_length=100, null=True, blank=True)
     channel_verified = models.BooleanField(default=False)
 
     def request_campaign(self, campaign):

@@ -1,4 +1,5 @@
 from io import FileIO
+import logging
 import google.oauth2.credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
@@ -6,6 +7,8 @@ from googleapiclient.http import MediaIoBaseDownload
 SCOPES = ['https://www.googleapis.com/auth/yt-analytics.readonly']
 API_SERVICE_NAME = 'youtubereporting'
 API_VERSION = 'v1'
+
+logger = logging.getLogger(__name__)
 
 
 class YouTubeReportHook:
