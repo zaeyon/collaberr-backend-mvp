@@ -23,21 +23,6 @@ class YoutubeAuthView(APIView):
     """
     Pass in Collaberr Auth redirect URL to frontend
     """
-    def get(self, request):
-        if request.user.is_authenticated:
-            flow = Flow.from_client_secrets_file(
-                settings.YOUTUBE_SECRETS_FILE,
-                scopes=SCOPES,
-                redirect_uri=REDIRECT_URI
-            )
-            authorization_url, state = flow.authorization_url(
-                access_type='offline',
-                include_granted_scopes='true'
-            )
-            return JsonResponse({'authorization_url': authorization_url})
-        else:
-            return HttpResponseForbidden('Access denied')
-
     def patch(self, request):
         """
         After user has authorized Collaberr,
@@ -58,8 +43,6 @@ class YoutubeAuthView(APIView):
             try:
                 creator = Creator.objects.get(account_id=account_id)
                 creator.channel_handle = request.data['channel_handle']
-                # creator.channel_id = request.data['channel_id']
-                # creator.channel_name = request.data['channel_name']
                 creator.save()
             except Creator.DoesNotExist:
                 JsonResponse({'error': 'Creator does not exist'})
