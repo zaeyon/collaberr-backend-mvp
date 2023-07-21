@@ -16,15 +16,14 @@ class ChannelBasic(models.Model):
     creator_id = models.OneToOneField(
         'creators.Creator',
         on_delete=models.CASCADE,
-        related_name='creator_stats',
+        related_name='creator_basics',
         db_column='creator_id',
         primary_key=True
     )
-    account_id = models.ForeignKey(
+    owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='creator_stats',
-        db_column='account_id',
+        related_name='creator_basics',
     )
     # dimensions
     date = models.DateField()

@@ -1,17 +1,21 @@
 import requests
+import logging
 from urllib.parse import urlencode, parse_qs, urlparse
+
 # django imports
 from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.conf import settings
+
 # drf imports
 from rest_framework.views import APIView
+
 # google imports
 from google_auth_oauthlib.flow import Flow
+
 # collaberr imports
 from core.api.youtube_analytics.serializers import YoutubeCredentialsSerializer
 from core.api.creators.models import Creator
-import logging
 
 SCOPES = ['https://www.googleapis.com/auth/yt-analytics.readonly']
 REDIRECT_URI = "http://localhost:8000/api/youtube/oauth2callback/"
