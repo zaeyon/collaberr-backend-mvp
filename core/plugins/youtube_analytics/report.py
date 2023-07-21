@@ -88,14 +88,20 @@ class YouTubeReportHook:
         """
         List all jobs for the current account
         """
-        # Potentially, return list of job_ids
         results = self.service.jobs().list().execute()
 
         if 'jobs' in results and results['jobs']:
             jobs = results['jobs']
+            job_info = []
             for job in jobs:
                 print('Reporting job id: %s\n name: %s\n for reporting type: %s\n'
                       % (job['id'], job['name'], job['reportTypeId']))
+                job_info.append({
+                    "id": job['id'],
+                    "name": job['name'],
+                    "report_type": job['reportTypeId'],
+                })
+            return job_info
         else:
             print('No jobs found')
             return False
@@ -113,9 +119,16 @@ class YouTubeReportHook:
             ).execute()
             if 'reports' in results and results['reports']:
                 reports = results['reports']
+                report_url_info = []
                 for report in reports:
-                    print('Report dates: %s to %s\n       download URL: %s\n'
-                          % (report['startTime'], report['endTime'], report['downloadUrl']))
+                    # print('Report times: %s to %s\n       download URL: %s\n'
+                    #       % (report['startTime'], report['endTime'], report['downloadUrl']))
+                    report_url_info.append({
+                        "report_url": report['downloadUrl'],
+                        "start_time": report['startTime'],
+                        "end_time": report['endTime'],
+                    })
+                return report_url_info
             else:
                 print("No reports found.")
         except Exception as e:
@@ -136,3 +149,6 @@ class YouTubeReportHook:
         if status:
             print('Download %d%%.' % int(status.progress() * 100))
         print('Download Complete!')
+
+    def upload_to_s3(self, local_file):
+        pass
