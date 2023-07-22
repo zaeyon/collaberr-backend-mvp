@@ -147,7 +147,6 @@ class YouTubeReportHook:
         )
         request.uri = report_url
         fh = FileIO(local_file, mode='wb')
-        # Stream/download the report in a single request.
         downloader = MediaIoBaseDownload(fh, request, chunksize=-1)
 
         done = False

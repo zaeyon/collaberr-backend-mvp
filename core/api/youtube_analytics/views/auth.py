@@ -15,7 +15,9 @@ from google_auth_oauthlib.flow import Flow
 
 # collaberr imports
 from core.api.youtube_analytics.serializers import YoutubeCredentialsSerializer
+from core.api.youtube_analytics.models import YoutubeReports 
 from core.api.creators.models import Creator
+from core.plugins.youtube_analytics.report import YoutubeReportHook
 
 SCOPES = ['https://www.googleapis.com/auth/yt-analytics.readonly']
 REDIRECT_URI = "http://localhost:8000/api/youtube/oauth2callback/"
@@ -102,10 +104,16 @@ class YoutubeConfirmView(APIView):
         creator = Creator.objects.get(account_id=request.user.id)
         if serializer.is_valid(raise_exception=True):
             if creator.verify_channel(**serializer.validated_data):
+                yt_report_hook = YoutubeReportHook(**serializer.validated_data)
+                yt_report_hook.create_reporting_job('channel_demographics_a1', 'Channel Demographics')
+                logger.info(f'Created channel_demographics job for {creator.channel_handle}')
+                yt_report_hook.create_reporting_job('channel_basic_a2', 'Channel Basic')
+                logger.info(f'Created channel_basic job for {creator.channel_handle}')
+
                 serializer.save()
-                return redirect('http://localhost:3000/youtubeConfirm/')
+                return redirect('http://localhost:3000/youtube-confirm/')
             else:
-                return HttpResponseBadRequest('Invalid channel')
+                return redirect('http://localhost:3000/youtube-declined/')
         return HttpResponseBadRequest('Invalid parameters')
 
 
