@@ -30,6 +30,8 @@ pytest-django = "^4.5.2"
 psycopg2 = "^2.9.6"
 pillow = "^9.5.0"
 pyyaml = "^6.0"
+python-dotenv = "^1.0.0"
+boto3 = "^1.28.9"
  
 [tool.poetry.extras]
 argon2 = ["argon2-cffi"]

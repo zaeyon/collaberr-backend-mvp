@@ -2,16 +2,16 @@ from django.db import models
 from django.conf import settings
 
 
-class ChannelBasic(models.Model):
+class YoutubeChannelBasic(models.Model):
     """
     Based on channel_basic_a2
     Only verified channel will have this report
     Aggregated on date, video_id, subscribed_status, country_code
     """
     class Meta:
-        db_table = 'channel_basics'
-        verbose_name = 'Channel Basic'
-        verbose_name_plural = 'Channel Basics'
+        db_table = 'youtube_channel_basics'
+        verbose_name = 'Youtube Channel Basic'
+        verbose_name_plural = 'Youtube Channel Basics'
 
     creator_id = models.OneToOneField(
         'creators.Creator',

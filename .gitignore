@@ -82,4 +82,4 @@ venv/
 *_secret.csv
 
 Dockerfile.test
-
+*.csv
