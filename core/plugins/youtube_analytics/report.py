@@ -1,5 +1,6 @@
 from io import FileIO
 import logging
+import os
 import google.oauth2.credentials
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
@@ -135,6 +136,12 @@ class YouTubeReportHook:
             print(f"An error occurred: {str(e)}")
 
     def download_report(self, report_url, local_file):
+        dir = os.path.dirname(local_file)
+
+        # Create the dir if it doesn't exist
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+
         request = self.service.media().download(
             resourceName=' '
         )
@@ -147,6 +154,7 @@ class YouTubeReportHook:
         while done is False:
             status, done = downloader.next_chunk()
         if status:
+            print(f'Downloaded {local_file}')
             print('Download %d%%.' % int(status.progress() * 100))
         print('Download Complete!')
 
