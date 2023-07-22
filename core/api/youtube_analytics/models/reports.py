@@ -2,6 +2,9 @@ from django.db import models
 
 
 class YoutubeReports(models.Model):
+    """
+    Display what kind of reports are available along with dates
+    """
     class Meta:
         db_table = 'youtube_reports'
         verbose_name = 'Youtube Report'
