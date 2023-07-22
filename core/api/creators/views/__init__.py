@@ -1,0 +1,1 @@
+from .join_campaign import request_to_join_campaign

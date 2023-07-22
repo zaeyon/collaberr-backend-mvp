@@ -28,6 +28,8 @@ class Creator(models.Model):
     channel_name = models.CharField(max_length=100, null=True, blank=True)
     channel_handle = models.CharField(max_length=100, null=True, blank=True)
     channel_verified = models.BooleanField(default=False)
+    channel_registered_date = models.DateField(null=True, blank=True)
+    channel_report_generated = models.BooleanField(default=False)
 
     def request_campaign(self, campaign):
         if campaign not in self.requested_campaigns.all():
@@ -75,6 +77,7 @@ class Creator(models.Model):
         query_result = youtube_query_hook.get_query(**query_params)
         if query_result:
             self.channel_verified = True
+            self.channel_registered_date = date.today()
             self.save()
             return True
         else:
