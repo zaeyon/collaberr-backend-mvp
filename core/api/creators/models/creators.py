@@ -6,7 +6,7 @@ from django.db import models
 from django.conf import settings
 
 # collaberr imports
-from core.plugins.youtube_analytics.query import YouTubeQueryHook
+from core.plugins.youtube_analytics.query import YoutubeQueryHook
 
 
 class Creator(models.Model):
@@ -73,7 +73,7 @@ class Creator(models.Model):
             'dimensions': 'day',
             'sort': '-views',
         }
-        youtube_query_hook = YouTubeQueryHook(**credentials)
+        youtube_query_hook = YoutubeQueryHook(**credentials)
         query_result = youtube_query_hook.get_query(**query_params)
         if query_result:
             self.channel_verified = True

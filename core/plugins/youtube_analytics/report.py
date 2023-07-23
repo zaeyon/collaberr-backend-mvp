@@ -12,10 +12,10 @@ API_VERSION = 'v1'
 logger = logging.getLogger(__name__)
 
 
-class YouTubeReportHook:
+class YoutubeReportHook:
     """
-    Plugin to retrieve YouTube Report for User
-    Ex. yt_report_hook = YouTubeReportHook(**credentials)
+    Plugin to retrieve Youtube Report for User
+    Ex. yt_report_hook = YoutubeReportHook(**credentials)
         yt_report_hook.get_report_types()
         yt_report_hook.create_reporting_job('channel_traffic_source_a2', 'Traffic Source')
         yt_report_hook.list_reporting_jobs()
