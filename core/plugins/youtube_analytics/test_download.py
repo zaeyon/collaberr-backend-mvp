@@ -35,4 +35,4 @@ def bulk_download_report(credentials, download_path):
             report_url=report['report_url'],
             local_file=f'{data_dir}/{report["report_type"]}/{report["start_time"][:10]}.csv'
         )
-        time.sleep(15)
+        time.sleep(5)

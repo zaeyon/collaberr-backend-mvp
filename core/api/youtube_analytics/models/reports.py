@@ -1,27 +1,24 @@
 from django.db import models
 
 
-class YoutubeReports(models.Model):
+class YoutubeReportingJob(models.Model):
     """
     Display what kind of reports are available along with dates
     """
     class Meta:
-        db_table = 'youtube_reports'
-        verbose_name = 'Youtube Report'
-        verbose_name_plural = 'Youtube Reports'
+        db_table = 'youtube_reporting_job'
+        verbose_name = 'Youtube Reporting Job'
+        verbose_name_plural = 'Youtube Reporting Jobs'
 
     id = models.AutoField(primary_key=True)
-    date = models.DateField()
-    job_id = models.CharField(max_length=255)
-    report_url = models.CharField(max_length=255)
-    report_type = models.CharField(max_length=255)
-    report_name = models.CharField(max_length=255)
     owner = models.OneToOneField(
         'creators.Creator',
         on_delete=models.CASCADE,
         db_column='owner',
-        related_name='youtube_reports',
+        related_name='youtube_reporting_job',
     )
-
-# yt_report_hook.create_reporting_job('channel_demographics_a1', 'Channel Demographics')
-
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+    job_id = models.CharField(max_length=255)
+    # report_url = models.CharField(max_length=255)
+    job_type = models.CharField(max_length=255)
+    job_name = models.CharField(max_length=255)
