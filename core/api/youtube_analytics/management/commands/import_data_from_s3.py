@@ -4,7 +4,6 @@ import dotenv
 import csv
 
 from django.core.management.base import BaseCommand
-from django.db import connection
 
 from core.api.youtube_analytics.models import YoutubeChannelBasic
 from core.api.youtube_analytics.serializers import YoutubeChannelBasicSerializer
@@ -51,7 +50,6 @@ class Command(BaseCommand):
 
                         serializer = YoutubeChannelBasicSerializer(data=row)
                         if serializer.is_valid():
-                            # Save the deserialized data to the database
                             serializer.save()
                             print(f"Data from {csv_file} saved to {YoutubeChannelBasic._meta.db_table}")
                         else:

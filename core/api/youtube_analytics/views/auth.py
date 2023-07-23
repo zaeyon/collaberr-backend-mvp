@@ -15,7 +15,6 @@ from google_auth_oauthlib.flow import Flow
 
 # collaberr imports
 from core.api.youtube_analytics.serializers import YoutubeCredentialsSerializer
-from core.api.youtube_analytics.models import YoutubeReports 
 from core.api.creators.models import Creator
 from core.plugins.youtube_analytics.report import YoutubeReportHook
 

@@ -78,6 +78,7 @@ class Creator(models.Model):
         if query_result:
             self.channel_verified = True
             self.channel_registered_date = date.today()
+            # add celery task to update channel_report_generated field
             self.save()
             return True
         else:
