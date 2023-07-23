@@ -6,7 +6,7 @@ import time
 from pathlib import Path
 import boto3
 
-from report import YouTubeReportHook
+from report import YoutubeReportHook
 from botocore.exceptions import ClientError
 
 dotenv.load_dotenv()
@@ -23,7 +23,7 @@ def bulk_download_report(credentials, download_path):
         download_path=data_dir
     )
     """
-    yt_report_hook = YouTubeReportHook(**credentials)
+    yt_report_hook = YoutubeReportHook(**credentials)
     job_info = yt_report_hook.list_reporting_jobs()
     report_info = []
     for job in job_info:

@@ -13,12 +13,11 @@ class YoutubeChannelBasic(models.Model):
         verbose_name = 'Youtube Channel Basic'
         verbose_name_plural = 'Youtube Channel Basics'
 
-    creator_id = models.OneToOneField(
+    creator_id = models.ForeignKey(
         'creators.Creator',
         on_delete=models.CASCADE,
         related_name='creator_basics',
         db_column='creator_id',
-        primary_key=True
     )
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -30,32 +29,31 @@ class YoutubeChannelBasic(models.Model):
     channel_id = models.CharField(max_length=100)
     channel_name = models.CharField(max_length=100)
     channel_handle = models.CharField(max_length=100)
-    video_id = models.CharField(max_length=100)
-    subscribed_status = models.PositiveIntegerField(default=0)
+    video_id = models.CharField(max_length=100, blank=True, null=True)
+    subscribed_status = models.BooleanField(default=False)
     country_code = models.CharField(max_length=4)
     # core metrics
-    views = models.PositiveIntegerField(default=0)
-    comments = models.PositiveIntegerField(default=0)
-    likes = models.PositiveIntegerField(default=0)
-    dislikes = models.PositiveIntegerField(default=0)
-    shares = models.PositiveIntegerField(default=0)
-    watch_time_minutes = models.PositiveIntegerField(default=0)
-    average_view_duration_seconds = models.PositiveIntegerField(default=0)
-    average_view_percentage = models.PositiveIntegerField(default=0)
-    susbscribers_gained = models.PositiveIntegerField(default=0)
-    subscribers_lost = models.PositiveIntegerField(default=0)
+    views = models.IntegerField(default=0)
+    comments = models.IntegerField(default=0)
+    likes = models.IntegerField(default=0)
+    dislikes = models.IntegerField(default=0)
+    shares = models.IntegerField(default=0)
+    watch_time_minutes = models.FloatField(default=0)
+    average_view_duration_seconds = models.FloatField(default=0)
+    average_view_percentage = models.FloatField(default=0)
+    susbscribers_gained = models.IntegerField(default=0)
+    subscribers_lost = models.IntegerField(default=0)
     # additional metrics
-    annotation_impressions = models.PositiveIntegerField(default=0)
-    annotation_clicks = models.PositiveIntegerField(default=0)
-    annotation_click_through_rate = models.PositiveIntegerField(default=0)
-    card_impressions = models.PositiveIntegerField(default=0)
-    card_clicks = models.PositiveIntegerField(default=0)
-    card_click_through_rate = models.PositiveIntegerField(default=0)
-    videos_added_to_playlists = models.PositiveIntegerField(default=0)
-    videos_removed_from_playlists = models.PositiveIntegerField(default=0)
-    red_views = models.PositiveIntegerField(default=0)
-    red_watch_time_minutes = models.PositiveIntegerField(default=0)
-
+    annotation_impressions = models.IntegerField(default=0)
+    annotation_clicks = models.IntegerField(default=0)
+    annotation_click_through_rate = models.IntegerField(default=0)
+    card_impressions = models.IntegerField(default=0)
+    card_clicks = models.IntegerField(default=0)
+    card_click_through_rate = models.IntegerField(default=0)
+    videos_added_to_playlists = models.IntegerField(default=0)
+    videos_removed_from_playlists = models.IntegerField(default=0)
+    red_views = models.IntegerField(default=0)
+    red_watch_time_minutes = models.FloatField(default=0)
 
 # class ChannelDemographics(models.Model):
 #     """
