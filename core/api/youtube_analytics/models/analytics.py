@@ -40,8 +40,8 @@ class YoutubeChannelBasic(models.Model):
     shares = models.IntegerField(default=0)
     watch_time_minutes = models.FloatField(default=0)
     average_view_duration_seconds = models.FloatField(default=0)
-    average_view_percentage = models.FloatField(default=0)
-    susbscribers_gained = models.IntegerField(default=0)
+    average_view_duration_percentage = models.FloatField(default=0)
+    subscribers_gained = models.IntegerField(default=0)
     subscribers_lost = models.IntegerField(default=0)
     # additional metrics
     annotation_impressions = models.IntegerField(default=0)
