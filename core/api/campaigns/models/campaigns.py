@@ -3,6 +3,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.core.validators import MaxLengthValidator
 
+# from core.api.campaigns.managers import CampaignManager
 from core.general.models import CreatedModified
 
 import logging
@@ -36,6 +37,8 @@ class Campaign(CreatedModified):
         IGTV = 'IGTV'
         TIKTOK_VIDEO = 'Tiktok Video'
 
+    # objects = CampaignManager()
+
     id = models.AutoField(
             primary_key=True,
             unique=True,
@@ -53,6 +56,7 @@ class Campaign(CreatedModified):
                             null=True,
                             blank=True
                         )
+    thumbnail_url = models.URLField(null=True, blank=True)
     category = models.TextField(choices=Category.choices)
     platform = models.TextField(choices=Platform.choices)
     recruit_start_date = models.DateField()
