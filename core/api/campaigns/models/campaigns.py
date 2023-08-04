@@ -98,6 +98,23 @@ class Campaign(CreatedModified):
                                 blank=True
                             )
 
+    # content actions
+    content_submitted = models.ManyToManyField(
+                                'contents.Content',
+                                related_name='campaigns_submitted',
+                                blank=True
+                            )
+    content_approved = models.ManyToManyField(
+                                'contents.Content',
+                                related_name='campaigns_approved',
+                                blank=True
+                            )
+    content_declined = models.ManyToManyField(
+                                'contents.Content',
+                                related_name='campaigns_declined',
+                                blank=True
+                            )
+
     def add_requested_creator(self, creator):
         if creator in self.requested_creators.all():
             logger.info(f'{creator} already requested to join {self}')
@@ -120,6 +137,27 @@ class Campaign(CreatedModified):
         if creator in self.approved_creators.all():
             self.approved_creators.remove(creator)
         logger.info(f'{creator} declined to join {self}')
+        self.save()
+
+    def add_content_submitted(self, content):
+        self.content_submitted.add(content)
+        logger.info(f'{content} submitted to {self}')
+        self.save()
+
+    def add_content_approved(self, content):
+        self.content_submitted.remove(content)
+        self.content_approved.add(content)
+        if content in self.content_declined.all():
+            self.content_declined.remove(content)
+        logger.info(f'{content} approved to {self}')
+        self.save()
+
+    def add_content_declined(self, content):
+        self.content_submitted.remove(content)
+        self.content_declined.add(content)
+        if content in self.content_approved.all():
+            self.content_approved.remove(content)
+        logger.info(f'{content} declined to {self}')
         self.save()
 
     def __str__(self):
