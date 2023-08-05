@@ -32,6 +32,15 @@ class Creator(models.Model):
     channel_registered_date = models.DateField(null=True, blank=True)
     channel_report_generated = models.BooleanField(default=False)
 
+
+    # 테스트용 Creator Table Column
+    channel_profile_image = models.CharField(max_length=1000, null=True, blank=True)
+    channel_type = models.CharField(max_length=100, null=True, blank=True)
+    target = models.CharField(max_length=100, null=True, blank=True)
+    subscribers = models.PositiveIntegerField(default=0, null=True, blank=True)
+    average_views = models.PositiveIntegerField(default=0, null=True, blank=True)
+    uploads = models.PositiveIntegerField(default=0, null=True, blank=True)    
+
     def request_campaign(self, campaign):
         if campaign not in self.requested_campaigns.all():
             self.requested_campaigns.add(campaign)
