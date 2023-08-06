@@ -128,8 +128,8 @@ class CustomLoginView(generics.GenericAPIView):
                 )
             csrf.get_token(request)
             # SECURITY WARNING: Encryption needed
-            response.set_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'], access_token, httponly=True, secure=True, samesite='None')
-            response.set_cookie('refresh_token', refresh_token, httponly=True, secure=True, samesite='None')
+            response.set_cookie(settings.SIMPLE_JWT['AUTH_COOKIE'], access_token, httponly=False)
+            response.set_cookie('refresh_token', refresh_token, httponly=False)
             response.set_cookie('account_id', user.id, httponly=False)
             logger.info(f"Account logged in: {user.email}")
         return response

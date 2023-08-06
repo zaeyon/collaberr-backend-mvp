@@ -31,7 +31,7 @@ services:
     build:
       context: ../collaberr-web
     ports:
-      - '3000:3000'
+      - '80:3000'
     depends_on:
       - backend
 
@@ -39,7 +39,7 @@ services:
     image: dpage/pgadmin4:latest
     restart: unless-stopped
     ports:
-      - '80:80'
+      - '200:80'
     depends_on:
       - db
     environment:

@@ -3,7 +3,7 @@ SECRET_KEY = NotImplemented
 
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ec2-3-37-12-137.ap-northeast-2.compute.amazonaws.com', 'localhost']
 
 INSTALLED_APPS = [
     "django.contrib.admin",
