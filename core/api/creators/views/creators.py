@@ -6,7 +6,7 @@ from core.api.creators.serializers import CreatorSerializer
 
 
 class CreatorListAPIView(ListAPIView):
-    queryset = Creator.objects.all()
+    queryset = Creator.objects.filter(channel_verified=True)
     serializer_class = CreatorSerializer
     permissions = [AllowAny]
 
